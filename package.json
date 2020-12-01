@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "transpile": "tsc -w",
-    "start": "nodemon dist/index.js"
+    "start:js": "nodemon dist/index.js",
+    "start": "run-p transpile start:js"
   },
   "author": "",
   "license": "ISC",
