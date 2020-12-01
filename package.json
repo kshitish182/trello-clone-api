@@ -1,0 +1,23 @@
+{
+  "name": "trello-clone-api",
+  "version": "1.0.0",
+  "description": "\"Backend for trello clone app\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "transpile": "tsc -w",
+    "start": "nodemon dist/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.10.18",
+    "nodemon": "^2.0.6",
+    "typescript": "^4.1.2"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}
