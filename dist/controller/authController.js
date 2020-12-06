@@ -64,7 +64,7 @@ var loginController = function (req, res) { return __awaiter(void 0, void 0, voi
             case 0: return [4 /*yield*/, authService.loginService(req.body)];
             case 1:
                 result = _a.sent();
-                res.send(result);
+                res.json(result);
                 return [2 /*return*/];
         }
     });
@@ -77,7 +77,7 @@ var registerController = function (req, res) { return __awaiter(void 0, void 0, 
             case 0: return [4 /*yield*/, authService.registerService(req.body)];
             case 1:
                 result = _a.sent();
-                res.send(result);
+                res.json(result);
                 return [2 /*return*/];
         }
     });

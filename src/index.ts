@@ -21,6 +21,11 @@ async function connectDb(req: Request, res: Response, next: NextFunction) {
     next();
   } catch (err) {
     console.log("Could'nt connenct to mongodb", err);
+
+    res.json({
+      status: 500,
+      message: "Could'nt connect to database",
+    });
   }
 }
 

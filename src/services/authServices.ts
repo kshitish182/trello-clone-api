@@ -5,14 +5,8 @@ import UserModal from '../Models/user';
 const HASH_SALT_ROUND = 10;
 
 async function getUserByLoginCred(email: string) {
-  try {
-    const result = await UserModal.find({ email: email });
-    return result;
-  } catch (err) {
-    console.log(err, "Could'nt get user");
-
-    return [];
-  }
+  const result = await UserModal.find({ email: email });
+  return result;
 }
 
 async function authenticateUser(password: string, hashedPassword: string): Promise<boolean> {
@@ -34,21 +28,6 @@ async function hashPassword(password: string) {
 }
 
 async function registerUser(data: Users) {
-  // try {
-  //   await UserModal.insertMany({
-  //     firstName: data.firstName,
-  //     lastName: data.lastName,
-  //     email: data.email,
-  //     password: data.password
-  //   });
-
-  //   return true
-  // } catch(err) {
-  //     console.log(err);
-
-  //     return false;
-  //   }
-
   await UserModal.insertMany({
     firstName: data.firstName,
     lastName: data.lastName,
@@ -63,20 +42,33 @@ export const loginService = async (data: Pick<Users, 'email' | 'password'>) => {
     const [user] = ((await getUserByLoginCred(email)) as unknown) as Users[];
 
     if (!user) {
-      return "Could'nt find the user";
+      return {
+        status: 404,
+        message: "Could'nt find the user",
+      };
     }
 
     const isUserAuthentic = await authenticateUser(password, user.password);
 
     if (!isUserAuthentic) {
-      return "Could'nt login";
+      return {
+        status: 403,
+        message: 'Login failed - Incorrect user or password',
+      };
     }
 
-    return 'Login successful';
+    return {
+      status: 200,
+      message: 'Successfully logged in',
+      payload: user,
+    };
   } catch (err) {
     console.log(err, 'there was a error');
 
-    return "Could'nt login";
+    return {
+      status: 400,
+      message: `Could'nt log in the user - ${err}`,
+    };
   }
 };
 
@@ -84,19 +76,22 @@ export const registerService = async (data: Users) => {
   try {
     const { email, password } = data;
     const user = await getUserByLoginCred(email);
+    console.log(user);
 
     if (user.length) {
-      return 'User already exist';
+      return {
+        status: 403,
+        message: 'User already exists - Cannot re-register already existing user',
+      };
     }
 
     const hashedPassword = await hashPassword(password);
-    // const result = await registerUser({...data, password: hashedPassword});
     await registerUser({ ...data, password: hashedPassword });
 
-    return 'Users registered successfully';
+    return { status: 201, message: 'User has been registered sucessfully' };
   } catch (err) {
     console.log(err);
 
-    return "Users' could'nt be registered";
+    return { status: 400, message: `User could'nt be registered - ${err}` };
   }
 };

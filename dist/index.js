@@ -64,6 +64,10 @@ function connectDb(req, res, next) {
                 case 2:
                     err_1 = _a.sent();
                     console.log("Could'nt connenct to mongodb", err_1);
+                    res.json({
+                        status: 500,
+                        message: "Could'nt connect to database"
+                    });
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }

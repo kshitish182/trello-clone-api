@@ -56,27 +56,20 @@ var user_1 = __importDefault(require("../Models/user"));
 var HASH_SALT_ROUND = 10;
 function getUserByLoginCred(email) {
     return __awaiter(this, void 0, void 0, function () {
-        var result, err_1;
+        var result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, user_1.default.find({ email: email })];
+                case 0: return [4 /*yield*/, user_1.default.find({ email: email })];
                 case 1:
                     result = _a.sent();
                     return [2 /*return*/, result];
-                case 2:
-                    err_1 = _a.sent();
-                    console.log(err_1, "Could'nt get user");
-                    return [2 /*return*/, []];
-                case 3: return [2 /*return*/];
             }
         });
     });
 }
 function authenticateUser(password, hashedPassword) {
     return __awaiter(this, void 0, void 0, function () {
-        var result, err_2;
+        var result, err_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -86,8 +79,8 @@ function authenticateUser(password, hashedPassword) {
                     result = _a.sent();
                     return [2 /*return*/, result];
                 case 2:
-                    err_2 = _a.sent();
-                    console.log(err_2, "There was a error while compairing hash value");
+                    err_1 = _a.sent();
+                    console.log(err_1, 'There was a error while compairing hash value');
                     return [2 /*return*/, false];
                 case 3: return [2 /*return*/];
             }
@@ -111,38 +104,13 @@ function registerUser(data) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: 
-                // try {
-                //   await UserModal.insertMany({
-                //     firstName: data.firstName,
-                //     lastName: data.lastName,
-                //     email: data.email,
-                //     password: data.password
-                //   });
-                //   return true
-                // } catch(err) {
-                //     console.log(err);
-                //     return false;
-                //   }
-                return [4 /*yield*/, user_1.default.insertMany({
+                case 0: return [4 /*yield*/, user_1.default.insertMany({
                         firstName: data.firstName,
                         lastName: data.lastName,
                         email: data.email,
-                        password: data.password
+                        password: data.password,
                     })];
                 case 1:
-                    // try {
-                    //   await UserModal.insertMany({
-                    //     firstName: data.firstName,
-                    //     lastName: data.lastName,
-                    //     email: data.email,
-                    //     password: data.password
-                    //   });
-                    //   return true
-                    // } catch(err) {
-                    //     console.log(err);
-                    //     return false;
-                    //   }
                     _a.sent();
                     return [2 /*return*/];
             }
@@ -150,7 +118,7 @@ function registerUser(data) {
     });
 }
 var loginService = function (data) { return __awaiter(void 0, void 0, void 0, function () {
-    var email, password, user, isUserAuthentic, err_3;
+    var email, password, user, isUserAuthentic, err_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -162,26 +130,39 @@ var loginService = function (data) { return __awaiter(void 0, void 0, void 0, fu
             case 2:
                 user = (_a.sent())[0];
                 if (!user) {
-                    return [2 /*return*/, "Could'nt find the user"];
+                    return [2 /*return*/, {
+                            status: 404,
+                            message: "Could'nt find the user"
+                        }];
                 }
                 return [4 /*yield*/, authenticateUser(password, user.password)];
             case 3:
                 isUserAuthentic = _a.sent();
                 if (!isUserAuthentic) {
-                    return [2 /*return*/, "Could'nt login"];
+                    return [2 /*return*/, {
+                            status: 403,
+                            message: "Login failed - Incorrect user or password"
+                        }];
                 }
-                return [2 /*return*/, 'Login successful'];
+                return [2 /*return*/, {
+                        status: 200,
+                        message: "Successfully logged in",
+                        payload: user
+                    }];
             case 4:
-                err_3 = _a.sent();
-                console.log(err_3, "there was a error");
-                return [2 /*return*/, "Could'nt login"];
+                err_2 = _a.sent();
+                console.log(err_2, 'there was a error');
+                return [2 /*return*/, {
+                        status: 400,
+                        message: "Could'nt log in the user - " + err_2
+                    }];
             case 5: return [2 /*return*/];
         }
     });
 }); };
 exports.loginService = loginService;
 var registerService = function (data) { return __awaiter(void 0, void 0, void 0, function () {
-    var email, password, user, hashedPassword, err_4;
+    var email, password, user, hashedPassword, err_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -190,22 +171,24 @@ var registerService = function (data) { return __awaiter(void 0, void 0, void 0,
                 return [4 /*yield*/, getUserByLoginCred(email)];
             case 1:
                 user = _a.sent();
+                console.log(user);
                 if (user.length) {
-                    return [2 /*return*/, 'User already exist'];
+                    return [2 /*return*/, {
+                            status: 403,
+                            message: "User already exists - Cannot re-register already existing user"
+                        }];
                 }
                 return [4 /*yield*/, hashPassword(password)];
             case 2:
                 hashedPassword = _a.sent();
-                // const result = await registerUser({...data, password: hashedPassword});
                 return [4 /*yield*/, registerUser(__assign(__assign({}, data), { password: hashedPassword }))];
             case 3:
-                // const result = await registerUser({...data, password: hashedPassword});
                 _a.sent();
-                return [2 /*return*/, 'Users registered successfully'];
+                return [2 /*return*/, { status: 201, message: "User has been registered sucessfully" }];
             case 4:
-                err_4 = _a.sent();
-                console.log(err_4, "COuld'nt login user");
-                return [2 /*return*/, "Users' could'nt be registered"];
+                err_3 = _a.sent();
+                console.log(err_3);
+                return [2 /*return*/, { status: 400, message: "User could'nt be registered - " + err_3 }];
             case 5: return [2 /*return*/];
         }
     });
