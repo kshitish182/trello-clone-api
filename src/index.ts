@@ -1,24 +1,28 @@
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import authRouter from './routes/authRoute';
-// import moongose, { mongo } from 'mongoose';
+import moongose from 'mongoose';
+import { isNamedExportBindings } from 'typescript';
 
 const app = express();
 
 // middlewares
 app.use(express.json());
 
-// app.use(connectDb);
+app.use(connectDb);
 
 app.use('/', authRouter);
 
 /* connection to database */
 
-// function connectDb() {
-//   moongose
-//     .connect('mongodb://localhost/trelloDB', { useNewUrlParser: true, useUnifiedTopology: true })
-//     .then(() => console.log(`Connected`))
-//     .catch((err) => console.log(`Connection failed: ${err}`));
-// }
+async function connectDb(req: Request, res: Response, next: NextFunction) {
+  try {
+    await moongose.connect('mongodb://localhost/trelloDB', { useNewUrlParser: true, useUnifiedTopology: true });
+    console.log('Connected to MongoDB');
+    next();
+  } catch (err) {
+    console.log("Could'nt connenct to mongodb", err);
+  }
+}
 
 // connectDb();
 
