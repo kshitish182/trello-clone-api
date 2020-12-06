@@ -95,7 +95,7 @@ export const registerService = async (data: Users) => {
 
     return 'Users registered successfully';
   } catch (err) {
-    console.log(err, "COuld'nt login user");
+    console.log(err);
 
     return "Users' could'nt be registered";
   }
