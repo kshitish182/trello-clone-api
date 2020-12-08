@@ -3,7 +3,7 @@ export default interface Board {
   title: String;
   createdOn?: String;
   isArchived: boolean;
-  lists: List;
+  lists: List[];
 }
 
 export interface List {

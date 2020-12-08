@@ -26,11 +26,3 @@ export const storeBoard = async (data: Board) => {
     };
   }
 };
-
-// export const updateList = (data: List) => {
-//   try {
-//     const id = BoardModel.findById(data.id);
-
-//     }
-//   }
-// }

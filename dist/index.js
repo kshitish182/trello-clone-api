@@ -43,10 +43,12 @@ var mongoose_1 = __importDefault(require("mongoose"));
 var appRouter_1 = __importDefault(require("./routes/appRouter"));
 var authRoute_1 = __importDefault(require("./routes/authRoute"));
 var express_1 = __importDefault(require("express"));
+var cors_1 = __importDefault(require("cors"));
 var app = express_1.default();
 // middlewares
 app.use(express_1.default.json());
 app.use(connectDb);
+app.use(cors_1.default());
 app.use('/', authRoute_1.default);
 app.use('/api', appRouter_1.default);
 /* connection to database */

@@ -1,3 +1,4 @@
+import cors from 'cors';
 import moongose from 'mongoose';
 import appRouter from './routes/appRouter';
 import authRouter from './routes/authRoute';
@@ -9,6 +10,8 @@ const app = express();
 app.use(express.json());
 
 app.use(connectDb);
+
+app.use(cors());
 
 app.use('/', authRouter);
 app.use('/api', appRouter);
