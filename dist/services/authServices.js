@@ -132,7 +132,7 @@ var loginService = function (data) { return __awaiter(void 0, void 0, void 0, fu
                 if (!user) {
                     return [2 /*return*/, {
                             status: 404,
-                            message: "Could'nt find the user"
+                            message: "Could'nt find the user",
                         }];
                 }
                 return [4 /*yield*/, authenticateUser(password, user.password)];
@@ -141,20 +141,20 @@ var loginService = function (data) { return __awaiter(void 0, void 0, void 0, fu
                 if (!isUserAuthentic) {
                     return [2 /*return*/, {
                             status: 403,
-                            message: "Login failed - Incorrect user or password"
+                            message: 'Login failed - Incorrect user or password',
                         }];
                 }
                 return [2 /*return*/, {
                         status: 200,
-                        message: "Successfully logged in",
-                        payload: user
+                        message: 'Successfully logged in',
+                        payload: user,
                     }];
             case 4:
                 err_2 = _a.sent();
                 console.log(err_2, 'there was a error');
                 return [2 /*return*/, {
                         status: 400,
-                        message: "Could'nt log in the user - " + err_2
+                        message: "Could'nt log in the user - " + err_2,
                     }];
             case 5: return [2 /*return*/];
         }
@@ -175,7 +175,7 @@ var registerService = function (data) { return __awaiter(void 0, void 0, void 0,
                 if (user.length) {
                     return [2 /*return*/, {
                             status: 403,
-                            message: "User already exists - Cannot re-register already existing user"
+                            message: 'User already exists - Cannot re-register already existing user',
                         }];
                 }
                 return [4 /*yield*/, hashPassword(password)];
@@ -184,7 +184,7 @@ var registerService = function (data) { return __awaiter(void 0, void 0, void 0,
                 return [4 /*yield*/, registerUser(__assign(__assign({}, data), { password: hashedPassword }))];
             case 3:
                 _a.sent();
-                return [2 /*return*/, { status: 201, message: "User has been registered sucessfully" }];
+                return [2 /*return*/, { status: 201, message: 'User has been registered sucessfully' }];
             case 4:
                 err_3 = _a.sent();
                 console.log(err_3);

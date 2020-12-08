@@ -39,41 +39,43 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var mongoose_1 = __importDefault(require("mongoose"));
-var appRouter_1 = __importDefault(require("./routes/appRouter"));
-var authRoute_1 = __importDefault(require("./routes/authRoute"));
-var express_1 = __importDefault(require("express"));
-var app = express_1.default();
-// middlewares
-app.use(express_1.default.json());
-app.use(connectDb);
-app.use('/', authRoute_1.default);
-app.use('/api', appRouter_1.default);
-/* connection to database */
-function connectDb(req, res, next) {
-    return __awaiter(this, void 0, void 0, function () {
-        var err_1;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, mongoose_1.default.connect('mongodb://localhost/trelloDB', { useNewUrlParser: true, useUnifiedTopology: true })];
-                case 1:
-                    _a.sent();
-                    console.log('Connected to MongoDB');
-                    next();
-                    return [3 /*break*/, 3];
-                case 2:
-                    err_1 = _a.sent();
-                    console.log("Could'nt connenct to mongodb", err_1);
-                    res.json({
-                        status: 500,
-                        message: "Could'nt connect to database",
-                    });
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
-            }
-        });
+exports.storeBoard = void 0;
+var board_1 = __importDefault(require("../Models/board"));
+var storeBoard = function (data) { return __awaiter(void 0, void 0, void 0, function () {
+    var board, result, title, isArchived, _id, lists, err_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                board = new board_1.default({
+                    title: data.title,
+                    isArchived: data.isArchived,
+                    lists: data.lists
+                });
+                return [4 /*yield*/, board.save()];
+            case 1:
+                result = _a.sent();
+                title = result.title, isArchived = result.isArchived, _id = result._id, lists = result.lists;
+                return [2 /*return*/, {
+                        status: '201',
+                        message: 'Board created successfully',
+                        payload: { title: title, isArchived: isArchived, _id: _id, lists: lists }
+                    }];
+            case 2:
+                err_1 = _a.sent();
+                console.log(err_1);
+                return [2 /*return*/, {
+                        status: '400',
+                        message: 'There was an error'
+                    }];
+            case 3: return [2 /*return*/];
+        }
     });
-}
-app.listen(5000, function () { return console.log('Listening to port 5000'); });
+}); };
+exports.storeBoard = storeBoard;
+// export const updateList = (data: List) => {
+//   try {
+//     const id = BoardModel.findById(data.id);
+//     }
+//   }
+// }

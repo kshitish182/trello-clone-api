@@ -1,7 +1,7 @@
-import express, { NextFunction, Request, Response } from 'express';
-import authRouter from './routes/authRoute';
 import moongose from 'mongoose';
-import { isNamedExportBindings } from 'typescript';
+import appRouter from './routes/appRouter';
+import authRouter from './routes/authRoute';
+import express, { NextFunction, Request, Response } from 'express';
 
 const app = express();
 
@@ -11,6 +11,7 @@ app.use(express.json());
 app.use(connectDb);
 
 app.use('/', authRouter);
+app.use('/api', appRouter);
 
 /* connection to database */
 
@@ -28,7 +29,5 @@ async function connectDb(req: Request, res: Response, next: NextFunction) {
     });
   }
 }
-
-// connectDb();
 
 app.listen(5000, () => console.log('Listening to port 5000'));
