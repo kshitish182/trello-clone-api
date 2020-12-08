@@ -50,23 +50,23 @@ var storeBoard = function (data) { return __awaiter(void 0, void 0, void 0, func
                 board = new board_1.default({
                     title: data.title,
                     isArchived: data.isArchived,
-                    lists: data.lists
+                    lists: data.lists,
                 });
                 return [4 /*yield*/, board.save()];
             case 1:
-                result = _a.sent();
+                result = (_a.sent());
                 title = result.title, isArchived = result.isArchived, _id = result._id, lists = result.lists;
                 return [2 /*return*/, {
                         status: '201',
                         message: 'Board created successfully',
-                        payload: { title: title, isArchived: isArchived, _id: _id, lists: lists }
+                        payload: { title: title, isArchived: isArchived, _id: _id, lists: lists },
                     }];
             case 2:
                 err_1 = _a.sent();
                 console.log(err_1);
                 return [2 /*return*/, {
                         status: '400',
-                        message: 'There was an error'
+                        message: 'There was an error',
                     }];
             case 3: return [2 /*return*/];
         }
