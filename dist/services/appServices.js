@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.storeBoard = void 0;
+exports.getBoards = exports.storeBoard = void 0;
 var board_1 = __importDefault(require("../Models/board"));
 var storeBoard = function (data) { return __awaiter(void 0, void 0, void 0, function () {
     var board, result, title, isArchived, _id, lists, err_1;
@@ -73,9 +73,16 @@ var storeBoard = function (data) { return __awaiter(void 0, void 0, void 0, func
     });
 }); };
 exports.storeBoard = storeBoard;
-// export const updateList = (data: List) => {
-//   try {
-//     const id = BoardModel.findById(data.id);
-//     }
-//   }
-// }
+var getBoards = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var result;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, board_1.default.find().select(['title', '_id', 'isArchived', 'createdOn', 'lists'])];
+            case 1:
+                result = _a.sent();
+                console.log(result);
+                return [2 /*return*/, result];
+        }
+    });
+}); };
+exports.getBoards = getBoards;

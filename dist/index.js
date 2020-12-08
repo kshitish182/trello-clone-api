@@ -39,11 +39,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var cors_1 = __importDefault(require("cors"));
 var mongoose_1 = __importDefault(require("mongoose"));
 var appRouter_1 = __importDefault(require("./routes/appRouter"));
 var authRoute_1 = __importDefault(require("./routes/authRoute"));
 var express_1 = __importDefault(require("express"));
-var cors_1 = __importDefault(require("cors"));
 var app = express_1.default();
 // middlewares
 app.use(express_1.default.json());

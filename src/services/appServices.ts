@@ -26,3 +26,10 @@ export const storeBoard = async (data: Board) => {
     };
   }
 };
+
+export const getBoards = async () => {
+  const result = await BoardModel.find().select(['title', '_id', 'isArchived', 'createdOn', 'lists']);
+  console.log(result);
+
+  return result;
+};

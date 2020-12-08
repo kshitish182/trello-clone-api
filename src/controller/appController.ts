@@ -6,3 +6,8 @@ export const board = async (req: Request, res: Response) => {
   const result = await appService.storeBoard(req.body);
   res.json(result);
 };
+
+export const getBoard = async (req: Request, res: Response) => {
+  const result = await appService.getBoards();
+  res.json(result);
+};
