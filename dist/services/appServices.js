@@ -35,11 +35,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBoards = exports.storeBoard = void 0;
+exports.storeCard = exports.storeList = exports.getBoards = exports.storeBoard = void 0;
 var board_1 = __importDefault(require("../Models/board"));
 var storeBoard = function (data) { return __awaiter(void 0, void 0, void 0, function () {
     var board, result, title, isArchived, _id, lists, err_1;
@@ -86,3 +93,40 @@ var getBoards = function () { return __awaiter(void 0, void 0, void 0, function 
     });
 }); };
 exports.getBoards = getBoards;
+var storeList = function (data) { return __awaiter(void 0, void 0, void 0, function () {
+    var result, updatedList;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, board_1.default.findById(data.params.id).select('lists')];
+            case 1:
+                result = _a.sent();
+                updatedList = __spreadArrays(result.lists, [{ name: data.body.name, level: data.body.level }]);
+                result.lists = updatedList;
+                console.log(result);
+                result.save();
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.storeList = storeList;
+var storeCard = function (data) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, ownedBy, title, result, listItem;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _a = data.body, ownedBy = _a.ownedBy, title = _a.title;
+                return [4 /*yield*/, board_1.default.findById(data.params.id).select('lists')];
+            case 1:
+                result = _b.sent();
+                if (!result) {
+                    return [2 /*return*/, "List not found"];
+                }
+                listItem = result.lists.id("2123123");
+                if (!listItem) {
+                    return [2 /*return*/, "List not found"];
+                }
+                return [2 /*return*/, "Action completed"];
+        }
+    });
+}); };
+exports.storeCard = storeCard;

@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.List = void 0;
 var mongoose_1 = __importDefault(require("mongoose"));
 var listSubSchema = new mongoose_1.default.Schema({
     name: {
@@ -17,6 +18,10 @@ var listSubSchema = new mongoose_1.default.Schema({
         type: Number,
         required: true,
     },
+    card: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: 'cards'
+    }
 });
 var defaultList = [
     {
@@ -54,4 +59,5 @@ var boardSchema = new mongoose_1.default.Schema({
     },
 });
 var Board = mongoose_1.default.model('board', boardSchema);
+exports.List = mongoose_1.default.model('list', listSubSchema);
 exports.default = Board;

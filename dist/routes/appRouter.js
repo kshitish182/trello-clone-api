@@ -27,4 +27,6 @@ var appController = __importStar(require("../controller/appController"));
 var appRouter = express_1.default.Router();
 appRouter.post('/board', appController.board);
 appRouter.get('/board', appController.getBoard);
+appRouter.post('/board/:id', appController.storeList);
+appRouter.post('/lists/:id', appController.storeCard);
 exports.default = appRouter;

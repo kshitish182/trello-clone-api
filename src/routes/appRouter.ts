@@ -5,5 +5,7 @@ const appRouter = express.Router();
 
 appRouter.post('/board', appController.board);
 appRouter.get('/board', appController.getBoard);
+appRouter.post('/board/:id', appController.storeList);
+appRouter.post('/lists/:id', appController.storeCard);
 
 export default appRouter;

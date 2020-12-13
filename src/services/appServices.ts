@@ -1,5 +1,5 @@
 import Board, { List } from '../types/board';
-import BoardModel from '../Models/board';
+import BoardModel, { List as ListModel } from '../Models/board';
 
 export const storeBoard = async (data: Board) => {
   try {
@@ -32,4 +32,31 @@ export const getBoards = async () => {
   console.log(result);
 
   return result;
+};
+
+export const storeList = async (data: any) => {
+  const result = (await BoardModel.findById(data.params.id).select('lists')) as any;
+  const updatedList = [...result.lists, { name: data.body.name, level: data.body.level }];
+  result.lists = updatedList;
+  console.log(result);
+  result.save();
+};
+
+export const storeCard = async (data: any) => {
+  const { ownedBy, title } = data.body;
+  const result = (await BoardModel.findById(data.params.id).select('lists')) as any;
+
+  if (!result) {
+    return 'List not found';
+  }
+
+  // console.log(result.lists);
+
+  const listItem = result.lists.id('2123123');
+
+  if (!listItem) {
+    return 'List not found';
+  }
+
+  return 'Action completed';
 };
