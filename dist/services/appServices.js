@@ -99,7 +99,7 @@ var storeList = function (data) { return __awaiter(void 0, void 0, void 0, funct
         switch (_a.label) {
             case 0: return [4 /*yield*/, board_1.default.findById(data.params.id).select('lists')];
             case 1:
-                result = _a.sent();
+                result = (_a.sent());
                 updatedList = __spreadArrays(result.lists, [{ name: data.body.name, level: data.body.level }]);
                 result.lists = updatedList;
                 console.log(result);
@@ -117,15 +117,15 @@ var storeCard = function (data) { return __awaiter(void 0, void 0, void 0, funct
                 _a = data.body, ownedBy = _a.ownedBy, title = _a.title;
                 return [4 /*yield*/, board_1.default.findById(data.params.id).select('lists')];
             case 1:
-                result = _b.sent();
+                result = (_b.sent());
                 if (!result) {
-                    return [2 /*return*/, "List not found"];
+                    return [2 /*return*/, 'List not found'];
                 }
-                listItem = result.lists.id("2123123");
+                listItem = result.lists.id('2123123');
                 if (!listItem) {
-                    return [2 /*return*/, "List not found"];
+                    return [2 /*return*/, 'List not found'];
                 }
-                return [2 /*return*/, "Action completed"];
+                return [2 /*return*/, 'Action completed'];
         }
     });
 }); };

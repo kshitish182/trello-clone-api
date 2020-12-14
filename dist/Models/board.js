@@ -20,8 +20,8 @@ var listSubSchema = new mongoose_1.default.Schema({
     },
     card: {
         type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: 'cards'
-    }
+        ref: 'cards',
+    },
 });
 var defaultList = [
     {

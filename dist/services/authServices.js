@@ -59,9 +59,10 @@ function getUserByLoginCred(email) {
         var result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, user_1.default.find({ email: email })];
+                case 0: return [4 /*yield*/, user_1.default.find({ email: email }).select('-__v')];
                 case 1:
                     result = _a.sent();
+                    console.log(result);
                     return [2 /*return*/, result];
             }
         });
@@ -147,7 +148,11 @@ var loginService = function (data) { return __awaiter(void 0, void 0, void 0, fu
                 return [2 /*return*/, {
                         status: 200,
                         message: 'Successfully logged in',
-                        payload: user,
+                        payload: {
+                            firstName: user.firstName,
+                            lastName: user.lastName,
+                            boards: user.boards,
+                        },
                     }];
             case 4:
                 err_2 = _a.sent();

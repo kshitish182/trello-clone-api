@@ -5,7 +5,8 @@ import UserModal from '../Models/user';
 const HASH_SALT_ROUND = 10;
 
 async function getUserByLoginCred(email: string) {
-  const result = await UserModal.find({ email: email });
+  const result = await UserModal.find({ email: email }).select('-__v');
+  console.log(result);
   return result;
 }
 
@@ -60,7 +61,11 @@ export const loginService = async (data: Pick<Users, 'email' | 'password'>) => {
     return {
       status: 200,
       message: 'Successfully logged in',
-      payload: user,
+      payload: {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        boards: user.boards,
+      },
     };
   } catch (err) {
     console.log(err, 'there was a error');

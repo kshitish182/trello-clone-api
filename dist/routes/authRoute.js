@@ -25,6 +25,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var authController = __importStar(require("../controller/authController"));
 var authRouter = express_1.default.Router();
-authRouter.get('/login', authController.loginController);
+authRouter.post('/login', authController.loginController);
 authRouter.post('/register', authController.registerController);
 exports.default = authRouter;

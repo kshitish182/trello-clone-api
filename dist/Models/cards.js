@@ -7,21 +7,21 @@ var mongoose_1 = __importDefault(require("mongoose"));
 var cardSchema = new mongoose_1.default.Schema({
     title: {
         type: String,
-        required: true
+        required: true,
     },
     description: {
         type: String,
-        default: ''
+        default: '',
     },
     createdOn: {
         type: Date,
-        default: Date.now
+        default: Date.now,
     },
     ownedBy: {
         type: mongoose_1.default.Schema.Types.ObjectId,
         ref: 'boards',
-        required: true
-    }
+        required: true,
+    },
 });
 var Cards = mongoose_1.default.model('card', cardSchema);
 exports.default = Cards;
