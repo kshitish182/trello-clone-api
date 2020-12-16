@@ -1,12 +1,20 @@
+import dotenv from 'dotenv';
 import brcypt from 'bcrypt';
+import jsonwebtoken from 'jsonwebtoken';
+
+dotenv.config();
+
 import Users from '../types/users';
 import UserModal from '../Models/user';
 
 const HASH_SALT_ROUND = 10;
 
+const createToken = (userInfo: { email: string }) => {
+  return jsonwebtoken.sign(userInfo, process.env.SECRET_TOKEN_KEY as string);
+};
+
 async function getUserByLoginCred(email: string) {
   const result = await UserModal.find({ email: email }).select('-__v');
-  console.log(result);
   return result;
 }
 
@@ -58,13 +66,18 @@ export const loginService = async (data: Pick<Users, 'email' | 'password'>) => {
       };
     }
 
+    const accessToken = createToken({ email: user.email });
+
     return {
       status: 200,
       message: 'Successfully logged in',
-      payload: {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        boards: user.boards,
+      data: {
+        user: {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          boards: user.boards,
+        },
+        accessToken: accessToken,
       },
     };
   } catch (err) {
@@ -92,8 +105,9 @@ export const registerService = async (data: Users) => {
 
     const hashedPassword = await hashPassword(password);
     await registerUser({ ...data, password: hashedPassword });
+    const accessToken = createToken({ email: data.email });
 
-    return { status: 201, message: 'User has been registered sucessfully' };
+    return { status: 201, message: 'User has been registered sucessfully', data: { accessToken } };
   } catch (err) {
     console.log(err);
 

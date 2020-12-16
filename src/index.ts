@@ -1,10 +1,31 @@
 import cors from 'cors';
+import dotenv from 'dotenv';
 import moongose from 'mongoose';
-import appRouter from './routes/appRouter';
-import authRouter from './routes/authRoute';
+import jwt from 'jsonwebtoken';
 import express, { NextFunction, Request, Response } from 'express';
 
+import appRouter from './routes/appRouter';
+import authRouter from './routes/authRoute';
+
 const app = express();
+dotenv.config();
+
+/* verify jwt token */
+const validateAuthorization = (req: Request, res: Response, next: NextFunction) => {
+  const accessToken = req.headers.authorization?.split(' ')[1] as string;
+
+  jwt.verify(accessToken, process.env.SECRET_TOKEN_KEY as string, (err) => {
+    if (err) {
+      res.json({
+        status: 403,
+        message: 'User not authorized',
+      });
+
+      return;
+    }
+    next();
+  });
+};
 
 // middlewares
 app.use(express.json());
@@ -14,7 +35,7 @@ app.use(connectDb);
 app.use(cors());
 
 app.use('/', authRouter);
-app.use('/api', appRouter);
+app.use('/api', validateAuthorization, appRouter);
 
 /* connection to database */
 
