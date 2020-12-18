@@ -162,7 +162,9 @@ var loginService = function (data) { return __awaiter(void 0, void 0, void 0, fu
 }); };
 exports.loginService = loginService;
 function doesUserExist(userEmail) {
-    return user_1.default.find({ email: userEmail }).then(function (data) { return data; }).catch(function (err) {
+    return user_1.default.find({ email: userEmail })
+        .then(function (data) { return data; })
+        .catch(function (err) {
         console.log(err);
         return [];
     });
@@ -189,12 +191,16 @@ var registerService = function (data) { return __awaiter(void 0, void 0, void 0,
                 return [4 /*yield*/, registerUser(__assign(__assign({}, data), { password: hashedPassword }))];
             case 3:
                 userData = (_a.sent())[0];
-                return [2 /*return*/, { status: 201, message: 'User has been registered sucessfully', data: {
+                return [2 /*return*/, {
+                        status: 201,
+                        message: 'User has been registered sucessfully',
+                        data: {
                             _id: userData._id,
                             firstName: userData.firstName,
                             lastName: userData.lastName,
-                            boards: userData.boards
-                        } }];
+                            boards: userData.boards,
+                        },
+                    }];
             case 4:
                 err_3 = _a.sent();
                 console.log(err_3);

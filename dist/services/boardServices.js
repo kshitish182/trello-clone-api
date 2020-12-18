@@ -60,7 +60,7 @@ var createBoard = function (userId, data) { return __awaiter(void 0, void 0, voi
                 userData = _a.sent();
                 if (!userData) {
                     return [2 /*return*/, {
-                            status: '404',
+                            status: 404,
                             message: 'User not found',
                         }];
                 }
@@ -69,14 +69,14 @@ var createBoard = function (userId, data) { return __awaiter(void 0, void 0, voi
                 boardId = _a.sent();
                 storeObjectIdInUser(userData._id, boardId);
                 return [2 /*return*/, {
-                        status: '201',
+                        status: 201,
                         message: 'Board created successfully',
                     }];
             case 3:
                 err_1 = _a.sent();
                 console.log(err_1);
                 return [2 /*return*/, {
-                        status: '400',
+                        status: 400,
                         message: 'There was an error',
                     }];
             case 4: return [2 /*return*/];

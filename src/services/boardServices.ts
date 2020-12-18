@@ -8,7 +8,7 @@ export const createBoard = async (userId: string, data: Board) => {
 
     if (!userData) {
       return {
-        status: '404',
+        status: 404,
         message: 'User not found',
       };
     }
@@ -17,14 +17,14 @@ export const createBoard = async (userId: string, data: Board) => {
     storeObjectIdInUser(userData._id, boardId);
 
     return {
-      status: '201',
+      status: 201,
       message: 'Board created successfully',
     };
   } catch (err) {
     console.log(err);
 
     return {
-      status: '400',
+      status: 400,
       message: 'There was an error',
     };
   }
