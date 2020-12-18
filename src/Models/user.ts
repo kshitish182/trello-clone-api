@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 const userSchema = new mongoose.Schema({
   firstName: {
@@ -22,10 +22,12 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: Date.now(),
   },
-  boards: {
-    type: [String],
-    default: [],
-  },
+  boards: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'board',
+    },
+  ],
 });
 
 export default mongoose.model('user', userSchema);

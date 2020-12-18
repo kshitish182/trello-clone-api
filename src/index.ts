@@ -11,21 +11,22 @@ const app = express();
 dotenv.config();
 
 /* verify jwt token */
-const validateAuthorization = (req: Request, res: Response, next: NextFunction) => {
-  const accessToken = req.headers.authorization?.split(' ')[1] as string;
+// const validateAuthorization = (req: Request, res: Response, next: NextFunction) => {
+//   const accessToken = req.headers.authorization?.split(' ')[1] as string;
+//   console.log(req.headers);
 
-  jwt.verify(accessToken, process.env.SECRET_TOKEN_KEY as string, (err) => {
-    if (err) {
-      res.json({
-        status: 403,
-        message: 'User not authorized',
-      });
+//   jwt.verify(accessToken, process.env.SECRET_TOKEN_KEY as string, (err) => {
+//     if (err) {
+//       res.json({
+//         status: 403,
+//         message: 'User not authorized',
+//       });
 
-      return;
-    }
-    next();
-  });
-};
+//       return;
+//     }
+//     next();
+//   });
+// };
 
 // middlewares
 app.use(express.json());
@@ -35,7 +36,7 @@ app.use(connectDb);
 app.use(cors());
 
 app.use('/', authRouter);
-app.use('/api', validateAuthorization, appRouter);
+app.use('/api', appRouter);
 
 /* connection to database */
 

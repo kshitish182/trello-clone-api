@@ -42,33 +42,32 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var cors_1 = __importDefault(require("cors"));
 var dotenv_1 = __importDefault(require("dotenv"));
 var mongoose_1 = __importDefault(require("mongoose"));
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var express_1 = __importDefault(require("express"));
 var appRouter_1 = __importDefault(require("./routes/appRouter"));
 var authRoute_1 = __importDefault(require("./routes/authRoute"));
 var app = express_1.default();
 dotenv_1.default.config();
 /* verify jwt token */
-var validateAuthorization = function (req, res, next) {
-    var _a;
-    var accessToken = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(' ')[1];
-    jsonwebtoken_1.default.verify(accessToken, process.env.SECRET_TOKEN_KEY, function (err) {
-        if (err) {
-            res.json({
-                status: 403,
-                message: "User not authorized"
-            });
-            return;
-        }
-        next();
-    });
-};
+// const validateAuthorization = (req: Request, res: Response, next: NextFunction) => {
+//   const accessToken = req.headers.authorization?.split(' ')[1] as string;
+//   console.log(req.headers);
+//   jwt.verify(accessToken, process.env.SECRET_TOKEN_KEY as string, (err) => {
+//     if (err) {
+//       res.json({
+//         status: 403,
+//         message: 'User not authorized',
+//       });
+//       return;
+//     }
+//     next();
+//   });
+// };
 // middlewares
 app.use(express_1.default.json());
 app.use(connectDb);
 app.use(cors_1.default());
 app.use('/', authRoute_1.default);
-app.use('/api', validateAuthorization, appRouter_1.default);
+app.use('/api', appRouter_1.default);
 /* connection to database */
 function connectDb(req, res, next) {
     return __awaiter(this, void 0, void 0, function () {

@@ -51,7 +51,7 @@ var boardSchema = new mongoose_1.default.Schema({
     },
     isArchived: {
         type: Boolean,
-        required: true,
+        default: false,
     },
     lists: {
         type: [listSubSchema],

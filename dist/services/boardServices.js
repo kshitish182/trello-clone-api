@@ -46,67 +46,69 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.storeCard = exports.storeList = void 0;
+exports.createBoard = void 0;
+var user_1 = __importDefault(require("../Models/user"));
 var board_1 = __importDefault(require("../Models/board"));
-// export const storeBoard = async (userId: string, data: Board) => {
-//   try {
-//     const board = new BoardModel({
-//       title: data.title,
-//       isArchived: data.isArchived,
-//       lists: data.lists,
-//     });
-//     await board.save();
-//     const user =
-//     return {
-//       status: '201',
-//       message: 'Board created successfully',
-//     };
-//   } catch (err) {
-//     console.log(err);
-//     return {
-//       status: '400',
-//       message: 'There was an error',
-//     };
-//   }
-// };
-// export const getBoards = async () => {
-//   const result = await BoardModel.find().select(['title', '_id', 'isArchived', 'createdOn', 'lists']);
-//   return result;
-// };
-var storeList = function (data) { return __awaiter(void 0, void 0, void 0, function () {
-    var result, updatedList;
+var createBoard = function (userId, data) { return __awaiter(void 0, void 0, void 0, function () {
+    var userData, boardId, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, board_1.default.findById(data.params.id).select('lists')];
+            case 0:
+                _a.trys.push([0, 3, , 4]);
+                return [4 /*yield*/, user_1.default.findById(userId)];
             case 1:
-                result = (_a.sent());
-                updatedList = __spreadArrays(result.lists, [{ name: data.body.name, level: data.body.level }]);
-                result.lists = updatedList;
-                console.log(result);
+                userData = _a.sent();
+                if (!userData) {
+                    return [2 /*return*/, {
+                            status: '404',
+                            message: 'User not found'
+                        }];
+                }
+                return [4 /*yield*/, storeBoard(data)];
+            case 2:
+                boardId = _a.sent();
+                storeObjectIdInUser(userData._id, boardId);
+                return [2 /*return*/, {
+                        status: '201',
+                        message: 'Board created successfully',
+                    }];
+            case 3:
+                err_1 = _a.sent();
+                console.log(err_1);
+                return [2 /*return*/, {
+                        status: '400',
+                        message: 'There was an error',
+                    }];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+exports.createBoard = createBoard;
+var storeObjectIdInUser = function (userId, boardId) { return __awaiter(void 0, void 0, void 0, function () {
+    var result;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, user_1.default.findById(userId).select('boards')];
+            case 1:
+                result = _a.sent();
+                result.boards = __spreadArrays(result.boards, [boardId]);
                 result.save();
                 return [2 /*return*/];
         }
     });
 }); };
-exports.storeList = storeList;
-var storeCard = function (data) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, ownedBy, title, result, listItem;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+var storeBoard = function (data) { return __awaiter(void 0, void 0, void 0, function () {
+    var board, result;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
             case 0:
-                _a = data.body, ownedBy = _a.ownedBy, title = _a.title;
-                return [4 /*yield*/, board_1.default.findById(data.params.id).select('lists')];
+                board = new board_1.default({
+                    title: data.title,
+                });
+                return [4 /*yield*/, board.save()];
             case 1:
-                result = (_b.sent());
-                if (!result) {
-                    return [2 /*return*/, 'List not found'];
-                }
-                listItem = result.lists.id('2123123');
-                if (!listItem) {
-                    return [2 /*return*/, 'List not found'];
-                }
-                return [2 /*return*/, 'Action completed'];
+                result = _a.sent();
+                return [2 /*return*/, result._id];
         }
     });
 }); };
-exports.storeCard = storeCard;

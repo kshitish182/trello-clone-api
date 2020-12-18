@@ -26,9 +26,9 @@ var userSchema = new mongoose_1.default.Schema({
         type: String,
         default: Date.now(),
     },
-    boards: {
-        type: [String],
-        default: [],
-    },
+    boards: [{
+            type: mongoose_1.default.Schema.Types.ObjectId,
+            ref: 'board'
+        }],
 });
 exports.default = mongoose_1.default.model('user', userSchema);

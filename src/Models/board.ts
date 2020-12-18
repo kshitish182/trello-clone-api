@@ -48,7 +48,7 @@ const boardSchema = new mongoose.Schema({
   },
   isArchived: {
     type: Boolean,
-    required: true,
+    default: false,
   },
   lists: {
     type: [listSubSchema],

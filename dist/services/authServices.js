@@ -51,21 +51,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerService = exports.loginService = void 0;
-var dotenv_1 = __importDefault(require("dotenv"));
 var bcrypt_1 = __importDefault(require("bcrypt"));
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-dotenv_1.default.config();
 var user_1 = __importDefault(require("../Models/user"));
 var HASH_SALT_ROUND = 10;
-var createToken = function (userInfo) {
-    return jsonwebtoken_1.default.sign(userInfo, process.env.SECRET_TOKEN_KEY);
-};
 function getUserByLoginCred(email) {
     return __awaiter(this, void 0, void 0, function () {
         var result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, user_1.default.find({ email: email }).select('-__v')];
+                case 0: return [4 /*yield*/, user_1.default.find({ email: email }).populate('boards', 'title').select('-__v')];
                 case 1:
                     result = _a.sent();
                     return [2 /*return*/, result];
@@ -124,7 +118,7 @@ function registerUser(data) {
     });
 }
 var loginService = function (data) { return __awaiter(void 0, void 0, void 0, function () {
-    var email, password, user, isUserAuthentic, accessToken, err_2;
+    var email, password, user, isUserAuthentic, err_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -150,17 +144,14 @@ var loginService = function (data) { return __awaiter(void 0, void 0, void 0, fu
                             message: 'Login failed - Incorrect user or password',
                         }];
                 }
-                accessToken = createToken({ email: user.email });
                 return [2 /*return*/, {
                         status: 200,
                         message: 'Successfully logged in',
                         data: {
-                            user: {
-                                firstName: user.firstName,
-                                lastName: user.lastName,
-                                boards: user.boards,
-                            },
-                            accessToken: accessToken,
+                            _id: user._id,
+                            firstName: user.firstName,
+                            lastName: user.lastName,
+                            boards: user.boards,
                         },
                     }];
             case 4:
@@ -176,7 +167,7 @@ var loginService = function (data) { return __awaiter(void 0, void 0, void 0, fu
 }); };
 exports.loginService = loginService;
 var registerService = function (data) { return __awaiter(void 0, void 0, void 0, function () {
-    var email, password, user, hashedPassword, accessToken, err_3;
+    var email, password, user, hashedPassword, err_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -198,8 +189,7 @@ var registerService = function (data) { return __awaiter(void 0, void 0, void 0,
                 return [4 /*yield*/, registerUser(__assign(__assign({}, data), { password: hashedPassword }))];
             case 3:
                 _a.sent();
-                accessToken = createToken({ email: data.email });
-                return [2 /*return*/, { status: 201, message: 'User has been registered sucessfully', data: { accessToken: accessToken } }];
+                return [2 /*return*/, { status: 201, message: 'User has been registered sucessfully' }];
             case 4:
                 err_3 = _a.sent();
                 console.log(err_3);

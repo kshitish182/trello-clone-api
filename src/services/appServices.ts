@@ -1,38 +1,37 @@
+import UserModal from '../Models/user';
 import Board, { List } from '../types/board';
 import BoardModel, { List as ListModel } from '../Models/board';
 
-export const storeBoard = async (data: Board) => {
-  try {
-    const board = new BoardModel({
-      title: data.title,
-      isArchived: data.isArchived,
-      lists: data.lists,
-    });
+// export const storeBoard = async (userId: string, data: Board) => {
+//   try {
+//     const board = new BoardModel({
+//       title: data.title,
+//       isArchived: data.isArchived,
+//       lists: data.lists,
+//     });
 
-    const result = ((await board.save()) as unknown) as Board;
-    const { title, isArchived, _id, lists } = result;
+//     await board.save();
+//     const user =
 
-    return {
-      status: '201',
-      message: 'Board created successfully',
-      payload: { title, isArchived, _id, lists },
-    };
-  } catch (err) {
-    console.log(err);
+//     return {
+//       status: '201',
+//       message: 'Board created successfully',
+//     };
 
-    return {
-      status: '400',
-      message: 'There was an error',
-    };
-  }
-};
+//   } catch (err) {
+//     console.log(err);
 
-export const getBoards = async () => {
-  const result = await BoardModel.find().select(['title', '_id', 'isArchived', 'createdOn', 'lists']);
-  console.log(result);
+//     return {
+//       status: '400',
+//       message: 'There was an error',
+//     };
+//   }
+// };
 
-  return result;
-};
+// export const getBoards = async () => {
+//   const result = await BoardModel.find().select(['title', '_id', 'isArchived', 'createdOn', 'lists']);
+//   return result;
+// };
 
 export const storeList = async (data: any) => {
   const result = (await BoardModel.findById(data.params.id).select('lists')) as any;
