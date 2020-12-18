@@ -29,7 +29,7 @@ async function hashPassword(password: string) {
 }
 
 async function registerUser(data: Users) {
-  await UserModal.insertMany({
+  return UserModal.insertMany({
     firstName: data.firstName,
     lastName: data.lastName,
     email: data.email,
@@ -79,13 +79,22 @@ export const loginService = async (data: Pick<Users, 'email' | 'password'>) => {
   }
 };
 
+function doesUserExist(userEmail: string) {
+  return UserModal.find({ email: userEmail })
+    .then((data: any) => data)
+    .catch((err) => {
+      console.log(err);
+
+      return [];
+    });
+}
+
 export const registerService = async (data: Users) => {
   try {
     const { email, password } = data;
-    const user = await getUserByLoginCred(email);
-    console.log(user);
+    const user = await doesUserExist(email);
 
-    if (user.length) {
+    if (user.length > 0) {
       return {
         status: 403,
         message: 'User already exists - Cannot re-register already existing user',
@@ -93,9 +102,18 @@ export const registerService = async (data: Users) => {
     }
 
     const hashedPassword = await hashPassword(password);
-    await registerUser({ ...data, password: hashedPassword });
+    const [userData]: any = await registerUser({ ...data, password: hashedPassword });
 
-    return { status: 201, message: 'User has been registered sucessfully' };
+    return {
+      status: 201,
+      message: 'User has been registered sucessfully',
+      data: {
+        _id: userData._id,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        boards: userData.boards,
+      },
+    };
   } catch (err) {
     console.log(err);
 

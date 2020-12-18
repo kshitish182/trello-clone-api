@@ -103,17 +103,12 @@ function hashPassword(password) {
 function registerUser(data) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, user_1.default.insertMany({
-                        firstName: data.firstName,
-                        lastName: data.lastName,
-                        email: data.email,
-                        password: data.password,
-                    })];
-                case 1:
-                    _a.sent();
-                    return [2 /*return*/];
-            }
+            return [2 /*return*/, user_1.default.insertMany({
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    email: data.email,
+                    password: data.password,
+                })];
         });
     });
 }
@@ -166,18 +161,23 @@ var loginService = function (data) { return __awaiter(void 0, void 0, void 0, fu
     });
 }); };
 exports.loginService = loginService;
+function doesUserExist(userEmail) {
+    return user_1.default.find({ email: userEmail }).then(function (data) { return data; }).catch(function (err) {
+        console.log(err);
+        return [];
+    });
+}
 var registerService = function (data) { return __awaiter(void 0, void 0, void 0, function () {
-    var email, password, user, hashedPassword, err_3;
+    var email, password, user, hashedPassword, userData, err_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 4, , 5]);
                 email = data.email, password = data.password;
-                return [4 /*yield*/, getUserByLoginCred(email)];
+                return [4 /*yield*/, doesUserExist(email)];
             case 1:
                 user = _a.sent();
-                console.log(user);
-                if (user.length) {
+                if (user.length > 0) {
                     return [2 /*return*/, {
                             status: 403,
                             message: 'User already exists - Cannot re-register already existing user',
@@ -188,8 +188,13 @@ var registerService = function (data) { return __awaiter(void 0, void 0, void 0,
                 hashedPassword = _a.sent();
                 return [4 /*yield*/, registerUser(__assign(__assign({}, data), { password: hashedPassword }))];
             case 3:
-                _a.sent();
-                return [2 /*return*/, { status: 201, message: 'User has been registered sucessfully' }];
+                userData = (_a.sent())[0];
+                return [2 /*return*/, { status: 201, message: 'User has been registered sucessfully', data: {
+                            _id: userData._id,
+                            firstName: userData.firstName,
+                            lastName: userData.lastName,
+                            boards: userData.boards
+                        } }];
             case 4:
                 err_3 = _a.sent();
                 console.log(err_3);

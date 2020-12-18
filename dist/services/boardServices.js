@@ -61,7 +61,7 @@ var createBoard = function (userId, data) { return __awaiter(void 0, void 0, voi
                 if (!userData) {
                     return [2 /*return*/, {
                             status: '404',
-                            message: 'User not found'
+                            message: 'User not found',
                         }];
                 }
                 return [4 /*yield*/, storeBoard(data)];
