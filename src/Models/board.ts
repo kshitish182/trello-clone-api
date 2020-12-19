@@ -5,10 +5,6 @@ const listSubSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  createdOn: {
-    type: Date,
-    default: Date.now,
-  },
   level: {
     type: Number,
     required: true,
@@ -22,17 +18,14 @@ const listSubSchema = new mongoose.Schema({
 const defaultList = [
   {
     name: 'Todo',
-    createdOn: Date.now(),
     level: 0,
   },
   {
     name: 'In progress',
-    createdOn: Date.now(),
     level: 1,
   },
   {
     name: 'Done',
-    createdOn: Date.now(),
     level: 2,
   },
 ];
@@ -42,10 +35,6 @@ const boardSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  createdOn: {
-    type: Date,
-    default: Date.now,
-  },
   isArchived: {
     type: Boolean,
     default: false,
@@ -54,6 +43,13 @@ const boardSchema = new mongoose.Schema({
     type: [listSubSchema],
     default: defaultList,
   },
+  cards: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'cards',
+      default: [],
+    },
+  ],
 });
 
 const Board = mongoose.model('board', boardSchema);

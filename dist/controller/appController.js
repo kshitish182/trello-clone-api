@@ -55,7 +55,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.board = void 0;
+exports.createListController = exports.createCardController = exports.board = void 0;
+var listServices = __importStar(require("../services/listServices"));
+var cardServices = __importStar(require("../services/cardServices"));
 var boardServices = __importStar(require("../services/boardServices"));
 var board = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var result;
@@ -70,6 +72,32 @@ var board = function (req, res) { return __awaiter(void 0, void 0, void 0, funct
     });
 }); };
 exports.board = board;
+var createCardController = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var result;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, cardServices.createCard(req.params.id, req.body)];
+            case 1:
+                result = _a.sent();
+                res.status(result.status).json(result);
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.createCardController = createCardController;
+var createListController = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var result;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, listServices.createList(req.params.id, req.body)];
+            case 1:
+                result = _a.sent();
+                res.status(result.status).json(result);
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.createListController = createListController;
 // export const storeList = async (req: Request, res: Response) => {
 //   const result = await appService.storeList(req);
 //   res.json('List stored');

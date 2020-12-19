@@ -13,14 +13,9 @@ var cardSchema = new mongoose_1.default.Schema({
         type: String,
         default: '',
     },
-    createdOn: {
-        type: Date,
-        default: Date.now,
-    },
     ownedBy: {
-        type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: 'boards',
-        required: true,
+        type: String,
+        required: true
     },
 });
 var Cards = mongoose_1.default.model('card', cardSchema);

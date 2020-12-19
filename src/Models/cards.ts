@@ -9,13 +9,8 @@ const cardSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
-  createdOn: {
-    type: Date,
-    default: Date.now,
-  },
   ownedBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'boards',
+    type: String,
     required: true,
   },
 });

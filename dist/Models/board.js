@@ -10,10 +10,6 @@ var listSubSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
     },
-    createdOn: {
-        type: Date,
-        default: Date.now,
-    },
     level: {
         type: Number,
         required: true,
@@ -26,17 +22,14 @@ var listSubSchema = new mongoose_1.default.Schema({
 var defaultList = [
     {
         name: 'Todo',
-        createdOn: Date.now(),
         level: 0,
     },
     {
         name: 'In progress',
-        createdOn: Date.now(),
         level: 1,
     },
     {
         name: 'Done',
-        createdOn: Date.now(),
         level: 2,
     },
 ];
@@ -44,10 +37,6 @@ var boardSchema = new mongoose_1.default.Schema({
     title: {
         type: String,
         required: true,
-    },
-    createdOn: {
-        type: Date,
-        default: Date.now,
     },
     isArchived: {
         type: Boolean,
@@ -57,6 +46,11 @@ var boardSchema = new mongoose_1.default.Schema({
         type: [listSubSchema],
         default: defaultList,
     },
+    cards: [{
+            type: mongoose_1.default.Schema.Types.ObjectId,
+            ref: 'cards',
+            default: []
+        }]
 });
 var Board = mongoose_1.default.model('board', boardSchema);
 exports.List = mongoose_1.default.model('list', listSubSchema);
