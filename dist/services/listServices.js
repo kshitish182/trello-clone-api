@@ -102,7 +102,7 @@ var updateListLevel = function (boardId, data) { return __awaiter(void 0, void 0
                 if (!isBoardIdValid) {
                     return [2 /*return*/, {
                             status: 404,
-                            message: "Invalid board Id - not found"
+                            message: 'Invalid board Id - not found',
                         }];
                 }
                 return [4 /*yield*/, board_1.default.findById(boardId).select('lists')];
@@ -112,7 +112,7 @@ var updateListLevel = function (boardId, data) { return __awaiter(void 0, void 0
                 if (!filterListById) {
                     return [2 /*return*/, {
                             status: 404,
-                            message: "ListId not found"
+                            message: 'ListId not found',
                         }];
                 }
                 filterListById.level = data.level;
@@ -121,14 +121,14 @@ var updateListLevel = function (boardId, data) { return __awaiter(void 0, void 0
                 _a.sent();
                 return [2 /*return*/, {
                         status: 200,
-                        message: "Everything is ok"
+                        message: 'Everything is ok',
                     }];
             case 4:
                 err_2 = _a.sent();
                 console.log(err_2);
                 return [2 /*return*/, {
                         status: 400,
-                        message: "There was a error - " + err_2
+                        message: "There was a error - " + err_2,
                     }];
             case 5: return [2 /*return*/];
         }

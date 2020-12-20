@@ -28,3 +28,8 @@ export const updateListLevelController = async (req: Request, res: Response) => 
   const result = await listServices.updateListLevel(req.params.id, req.body);
   res.status(result.status).json(result);
 };
+
+export const updateCardOwnerController = async (req: Request, res: Response) => {
+  const result = await cardServices.updateCardOwner(req.params.id, req.body);
+  res.status(result.status).json(result);
+};

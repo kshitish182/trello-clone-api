@@ -1,3 +1,4 @@
+import { doesBoardExist } from './misc';
 import CardModel from '../Models/cards';
 import BoardModel from '../Models/board';
 
@@ -21,6 +22,9 @@ export const createCard = async (boardId: string, data: any) => {
     return {
       status: 201,
       message: 'Card created successfully',
+      data: {
+        _id: savedCardData._id,
+      },
     };
   } catch (err) {
     console.log(err);
@@ -46,3 +50,40 @@ async function storeInBoardCollection(cardId: string, boardId: string) {
   boardData.cards = [...boardData.cards, cardId];
   boardData.save();
 }
+
+export const updateCardOwner = async (boardId: string, data: { _id: string; ownedBy: string }) => {
+  try {
+    const isIdValid = await doesBoardExist(boardId);
+
+    if (!isIdValid) {
+      return {
+        status: 404,
+        message: 'Invalid board Id - not found',
+      };
+    }
+
+    const cardData: any = await CardModel.findById(data._id).select('ownedBy');
+
+    if (!cardData) {
+      return {
+        status: 404,
+        message: 'Card id not found',
+      };
+    }
+
+    cardData.ownedBy = data.ownedBy;
+    await cardData.save();
+
+    return {
+      status: 200,
+      message: 'Everything is OK',
+    };
+  } catch (err) {
+    console.log(err);
+
+    return {
+      status: 400,
+      error: `There was an error - ${err}`,
+    };
+  }
+};

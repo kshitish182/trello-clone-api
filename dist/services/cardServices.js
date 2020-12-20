@@ -46,7 +46,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createCard = void 0;
+exports.updateCardOwner = exports.createCard = void 0;
+var misc_1 = require("./misc");
 var cards_1 = __importDefault(require("../Models/cards"));
 var board_1 = __importDefault(require("../Models/board"));
 var createCard = function (boardId, data) { return __awaiter(void 0, void 0, void 0, function () {
@@ -76,6 +77,9 @@ var createCard = function (boardId, data) { return __awaiter(void 0, void 0, voi
                 return [2 /*return*/, {
                         status: 201,
                         message: 'Card created successfully',
+                        data: {
+                            _id: savedCardData._id
+                        }
                     }];
             case 4:
                 err_1 = _a.sent();
@@ -111,3 +115,47 @@ function storeInBoardCollection(cardId, boardId) {
         });
     });
 }
+var updateCardOwner = function (boardId, data) { return __awaiter(void 0, void 0, void 0, function () {
+    var isIdValid, cardData, err_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 4, , 5]);
+                return [4 /*yield*/, misc_1.doesBoardExist(boardId)];
+            case 1:
+                isIdValid = _a.sent();
+                if (!isIdValid) {
+                    return [2 /*return*/, {
+                            status: 404,
+                            message: 'Invalid board Id - not found',
+                        }];
+                }
+                return [4 /*yield*/, cards_1.default.findById(data._id).select('ownedBy')];
+            case 2:
+                cardData = _a.sent();
+                if (!cardData) {
+                    return [2 /*return*/, {
+                            status: 404,
+                            message: "Card id not found"
+                        }];
+                }
+                cardData.ownedBy = data.ownedBy;
+                return [4 /*yield*/, cardData.save()];
+            case 3:
+                _a.sent();
+                return [2 /*return*/, {
+                        status: 200,
+                        message: "Everything is OK"
+                    }];
+            case 4:
+                err_2 = _a.sent();
+                console.log(err_2);
+                return [2 /*return*/, {
+                        status: 400,
+                        error: "There was an error - " + err_2
+                    }];
+            case 5: return [2 /*return*/];
+        }
+    });
+}); };
+exports.updateCardOwner = updateCardOwner;
