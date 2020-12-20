@@ -54,18 +54,21 @@ export const getBoard = async (boardId: string) => {
     const boardData: any = await BoardModel.findById(boardId).select(['title', 'cards', 'lists']).populate('cards');
     const sortedList = boardData.lists.sort((value: any, nextValue: any) => value.level - nextValue.level);
     const appendedList = appendCardInList(sortedList, boardData.cards);
+    const responseData = {
+      _id: boardData._id,
+      title: boardData.title,
+      lists: appendedList,
+    };
 
     return {
       status: 200,
       message: 'Retrieved all the board',
-      data: appendedList,
+      data: responseData,
     };
   } catch (err) {
-    console.log(err);
-
     return {
       status: 400,
-      message: 'error',
+      message: `There was an error - ${err}`,
     };
   }
 };

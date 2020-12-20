@@ -124,7 +124,7 @@ var storeBoard = function (data) { return __awaiter(void 0, void 0, void 0, func
     });
 }); };
 var getBoard = function (boardId) { return __awaiter(void 0, void 0, void 0, function () {
-    var boardData, sortedList, appendedList, err_2;
+    var boardData, sortedList, appendedList, responseData, err_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -134,17 +134,21 @@ var getBoard = function (boardId) { return __awaiter(void 0, void 0, void 0, fun
                 boardData = _a.sent();
                 sortedList = boardData.lists.sort(function (value, nextValue) { return value.level - nextValue.level; });
                 appendedList = appendCardInList(sortedList, boardData.cards);
+                responseData = {
+                    _id: boardData._id,
+                    title: boardData.title,
+                    lists: appendedList,
+                };
                 return [2 /*return*/, {
                         status: 200,
-                        message: "Retrieved all the board",
-                        data: appendedList
+                        message: 'Retrieved all the board',
+                        data: responseData,
                     }];
             case 2:
                 err_2 = _a.sent();
-                console.log(err_2);
                 return [2 /*return*/, {
                         status: 400,
-                        message: "error"
+                        message: "There was an error - " + err_2,
                     }];
             case 3: return [2 /*return*/];
         }
