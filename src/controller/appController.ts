@@ -19,12 +19,7 @@ export const createListController = async (req: Request, res: Response) => {
   res.status(result.status).json(result);
 };
 
-// export const storeList = async (req: Request, res: Response) => {
-//   const result = await appService.storeList(req);
-//   res.json('List stored');
-// };
-
-// export const storeCard = async (req: Request, res: Response) => {
-//   const result = await appService.storeCard(req);
-//   res.json(result);
-// };
+export const getBoardController = async (req: Request, res: Response) => {
+  const result = await boardServices.getBoard(req.params.id);
+  res.status(result.status).json(result);
+};

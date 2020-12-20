@@ -60,7 +60,7 @@ var createList = function (boardId, data) { return __awaiter(void 0, void 0, voi
                 if (!boardData) {
                     return [2 /*return*/, {
                             status: 404,
-                            message: "Id not found"
+                            message: 'Id not found',
                         }];
                 }
                 return [4 /*yield*/, board_1.default.findById(boardId).select('lists')];
@@ -73,17 +73,17 @@ var createList = function (boardId, data) { return __awaiter(void 0, void 0, voi
                 savedListId = savedBoardData.lists[savedBoardData.lists.length - 1]._id;
                 return [2 /*return*/, {
                         status: 200,
-                        message: "Id found",
+                        message: 'Id found',
                         data: {
-                            listId: savedListId
-                        }
+                            listId: savedListId,
+                        },
                     }];
             case 4:
                 err_1 = _a.sent();
                 console.log(err_1);
                 return [2 /*return*/, {
                         status: 400,
-                        message: "There was an error while creating a list - " + err_1
+                        message: "There was an error while creating a list - " + err_1,
                     }];
             case 5: return [2 /*return*/];
         }

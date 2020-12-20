@@ -9,10 +9,6 @@ const listSubSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  card: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'cards',
-  },
 });
 
 const defaultList = [
@@ -46,8 +42,7 @@ const boardSchema = new mongoose.Schema({
   cards: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'cards',
-      default: [],
+      ref: 'card',
     },
   ],
 });

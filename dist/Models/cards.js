@@ -15,7 +15,7 @@ var cardSchema = new mongoose_1.default.Schema({
     },
     ownedBy: {
         type: String,
-        required: true
+        required: true,
     },
 });
 var Cards = mongoose_1.default.model('card', cardSchema);

@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -46,7 +57,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createBoard = void 0;
+exports.getBoard = exports.createBoard = void 0;
 var user_1 = __importDefault(require("../Models/user"));
 var board_1 = __importDefault(require("../Models/board"));
 var createBoard = function (userId, data) { return __awaiter(void 0, void 0, void 0, function () {
@@ -112,3 +123,37 @@ var storeBoard = function (data) { return __awaiter(void 0, void 0, void 0, func
         }
     });
 }); };
+var getBoard = function (boardId) { return __awaiter(void 0, void 0, void 0, function () {
+    var boardData, sortedList, appendedList, err_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, board_1.default.findById(boardId).select(['title', 'cards', 'lists']).populate('cards')];
+            case 1:
+                boardData = _a.sent();
+                sortedList = boardData.lists.sort(function (value, nextValue) { return value.level - nextValue.level; });
+                appendedList = appendCardInList(sortedList, boardData.cards);
+                return [2 /*return*/, {
+                        status: 200,
+                        message: "Retrieved all the board",
+                        data: appendedList
+                    }];
+            case 2:
+                err_2 = _a.sent();
+                console.log(err_2);
+                return [2 /*return*/, {
+                        status: 400,
+                        message: "error"
+                    }];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+exports.getBoard = getBoard;
+var appendCardInList = function (sortedList, cardData) {
+    return sortedList.map(function (list) {
+        var filteredCardId = cardData.filter(function (card) { return list._id.toString() === card.ownedBy; });
+        return __assign(__assign({}, list.toObject()), { cards: filteredCardId });
+    });
+};

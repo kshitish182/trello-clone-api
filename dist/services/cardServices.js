@@ -58,11 +58,13 @@ var createCard = function (boardId, data) { return __awaiter(void 0, void 0, voi
                 return [4 /*yield*/, board_1.default.findById(boardId).select('lists')];
             case 1:
                 boardData = _a.sent();
-                parentListData = !!boardData ? boardData.lists.filter(function (value) { return value._id.toString() === data.ownedBy; }) : [];
+                parentListData = !!boardData
+                    ? boardData.lists.filter(function (value) { return value._id.toString() === data.ownedBy; })
+                    : [];
                 if (!parentListData.length) {
                     return [2 /*return*/, {
                             status: 404,
-                            message: "Id not found"
+                            message: 'Id not found',
                         }];
                 }
                 return [4 /*yield*/, storeInCardCollection(data)];
@@ -73,14 +75,14 @@ var createCard = function (boardId, data) { return __awaiter(void 0, void 0, voi
                 _a.sent();
                 return [2 /*return*/, {
                         status: 201,
-                        message: "Card created successfully"
+                        message: 'Card created successfully',
                     }];
             case 4:
                 err_1 = _a.sent();
                 console.log(err_1);
                 return [2 /*return*/, {
                         status: 400,
-                        message: "There was an error while creating a card - " + err_1
+                        message: "There was an error while creating a card - " + err_1,
                     }];
             case 5: return [2 /*return*/];
         }
@@ -90,7 +92,7 @@ exports.createCard = createCard;
 function storeInCardCollection(data) {
     var card = new cards_1.default({
         ownedBy: data.ownedBy,
-        title: data.title
+        title: data.title,
     });
     return card.save();
 }

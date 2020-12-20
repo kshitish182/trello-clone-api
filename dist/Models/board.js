@@ -14,10 +14,6 @@ var listSubSchema = new mongoose_1.default.Schema({
         type: Number,
         required: true,
     },
-    card: {
-        type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: 'cards',
-    },
 });
 var defaultList = [
     {
@@ -46,11 +42,12 @@ var boardSchema = new mongoose_1.default.Schema({
         type: [listSubSchema],
         default: defaultList,
     },
-    cards: [{
+    cards: [
+        {
             type: mongoose_1.default.Schema.Types.ObjectId,
-            ref: 'cards',
-            default: []
-        }]
+            ref: 'card',
+        },
+    ],
 });
 var Board = mongoose_1.default.model('board', boardSchema);
 exports.List = mongoose_1.default.model('list', listSubSchema);
