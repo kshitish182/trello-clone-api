@@ -46,18 +46,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createList = void 0;
+exports.updateListLevel = exports.createList = void 0;
 var board_1 = __importDefault(require("../Models/board"));
 var createList = function (boardId, data) { return __awaiter(void 0, void 0, void 0, function () {
-    var boardData, listData, savedBoardData, savedListId, err_1;
+    var isBoardIdValid, listData, savedBoardData, savedListId, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 4, , 5]);
-                return [4 /*yield*/, board_1.default.findById(boardId).select('_id')];
+                return [4 /*yield*/, doesBoardExist(boardId)];
             case 1:
-                boardData = _a.sent();
-                if (!boardData) {
+                isBoardIdValid = _a.sent();
+                if (!isBoardIdValid) {
                     return [2 /*return*/, {
                             status: 404,
                             message: 'Id not found',
@@ -90,3 +90,64 @@ var createList = function (boardId, data) { return __awaiter(void 0, void 0, voi
     });
 }); };
 exports.createList = createList;
+var updateListLevel = function (boardId, data) { return __awaiter(void 0, void 0, void 0, function () {
+    var isBoardIdValid, boardData, filterListById, err_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 4, , 5]);
+                return [4 /*yield*/, doesBoardExist(boardId)];
+            case 1:
+                isBoardIdValid = _a.sent();
+                if (!isBoardIdValid) {
+                    return [2 /*return*/, {
+                            status: 404,
+                            message: "Invalid board Id - not found"
+                        }];
+                }
+                return [4 /*yield*/, board_1.default.findById(boardId).select('lists')];
+            case 2:
+                boardData = _a.sent();
+                filterListById = boardData.lists.filter(function (value) { return data._id === value._id.toString(); })[0];
+                if (!filterListById) {
+                    return [2 /*return*/, {
+                            status: 404,
+                            message: "ListId not found"
+                        }];
+                }
+                filterListById.level = data.level;
+                return [4 /*yield*/, boardData.save()];
+            case 3:
+                _a.sent();
+                return [2 /*return*/, {
+                        status: 200,
+                        message: "Everything is ok"
+                    }];
+            case 4:
+                err_2 = _a.sent();
+                console.log(err_2);
+                return [2 /*return*/, {
+                        status: 400,
+                        message: "There was a error - " + err_2
+                    }];
+            case 5: return [2 /*return*/];
+        }
+    });
+}); };
+exports.updateListLevel = updateListLevel;
+function doesBoardExist(boardId) {
+    return __awaiter(this, void 0, void 0, function () {
+        var result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, board_1.default.findById(boardId).select('_id')];
+                case 1:
+                    result = _a.sent();
+                    if (!result) {
+                        return [2 /*return*/, false];
+                    }
+                    return [2 /*return*/, true];
+            }
+        });
+    });
+}

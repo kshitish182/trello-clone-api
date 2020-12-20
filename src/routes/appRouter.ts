@@ -8,6 +8,9 @@ appRouter.post('/createCard/:id', appController.createCardController);
 appRouter.post('/createList/:id', appController.createListController);
 
 appRouter.get('/getBoard/:id', appController.getBoardController);
+
+appRouter.put('/updateListLevel/:id', appController.updateListLevelController);
+
 // appRouter.get('/board', appController.getBoard);
 // appRouter.post('/board/:id', appController.storeList);
 // appRouter.post('/lists/:id', appController.storeCard);

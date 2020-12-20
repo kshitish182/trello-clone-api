@@ -23,3 +23,8 @@ export const getBoardController = async (req: Request, res: Response) => {
   const result = await boardServices.getBoard(req.params.id);
   res.status(result.status).json(result);
 };
+
+export const updateListLevelController = async (req: Request, res: Response) => {
+  const result = await listServices.updateListLevel(req.params.id, req.body);
+  res.status(result.status).json(result);
+};
