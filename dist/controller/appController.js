@@ -66,7 +66,7 @@ var board = function (req, res) { return __awaiter(void 0, void 0, void 0, funct
             case 0: return [4 /*yield*/, boardServices.createBoard(req.params.id, req.body)];
             case 1:
                 result = _a.sent();
-                res.json(result);
+                res.status(result.status).json(result);
                 return [2 /*return*/];
         }
     });

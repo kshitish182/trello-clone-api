@@ -82,6 +82,9 @@ var createBoard = function (userId, data) { return __awaiter(void 0, void 0, voi
                 return [2 /*return*/, {
                         status: 201,
                         message: 'Board created successfully',
+                        data: {
+                            boardId: boardId
+                        }
                     }];
             case 3:
                 err_1 = _a.sent();

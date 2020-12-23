@@ -78,8 +78,8 @@ var createCard = function (boardId, data) { return __awaiter(void 0, void 0, voi
                         status: 201,
                         message: 'Card created successfully',
                         data: {
-                            _id: savedCardData._id
-                        }
+                            _id: savedCardData._id,
+                        },
                     }];
             case 4:
                 err_1 = _a.sent();
@@ -136,7 +136,7 @@ var updateCardOwner = function (boardId, data) { return __awaiter(void 0, void 0
                 if (!cardData) {
                     return [2 /*return*/, {
                             status: 404,
-                            message: "Card id not found"
+                            message: 'Card id not found',
                         }];
                 }
                 cardData.ownedBy = data.ownedBy;
@@ -145,14 +145,14 @@ var updateCardOwner = function (boardId, data) { return __awaiter(void 0, void 0
                 _a.sent();
                 return [2 /*return*/, {
                         status: 200,
-                        message: "Everything is OK"
+                        message: 'Everything is OK',
                     }];
             case 4:
                 err_2 = _a.sent();
                 console.log(err_2);
                 return [2 /*return*/, {
                         status: 400,
-                        error: "There was an error - " + err_2
+                        error: "There was an error - " + err_2,
                     }];
             case 5: return [2 /*return*/];
         }

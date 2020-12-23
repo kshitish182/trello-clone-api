@@ -6,7 +6,7 @@ import * as boardServices from '../services/boardServices';
 
 export const board = async (req: Request, res: Response) => {
   const result = await boardServices.createBoard(req.params.id, req.body);
-  res.json(result);
+  res.status(result.status).json(result);
 };
 
 export const createCardController = async (req: Request, res: Response) => {

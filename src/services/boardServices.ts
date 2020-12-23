@@ -1,9 +1,8 @@
-import mongoose from 'mongoose';
 import Board from '../types/board';
 import UserModel from '../Models/user';
 import BoardModel from '../Models/board';
 
-export const createBoard = async (userId: string, data: Board) => {
+export const createBoard = async (userId: string, data: { title: string }) => {
   try {
     const userData = await UserModel.findById(userId);
 
@@ -20,6 +19,9 @@ export const createBoard = async (userId: string, data: Board) => {
     return {
       status: 201,
       message: 'Board created successfully',
+      data: {
+        boardId: boardId,
+      },
     };
   } catch (err) {
     console.log(err);
@@ -37,7 +39,7 @@ const storeObjectIdInUser = async (userId: string, boardId: string) => {
   result.save();
 };
 
-const storeBoard = async (data: Board) => {
+const storeBoard = async (data: { title: string }) => {
   const board = new BoardModel({
     title: data.title,
   });
