@@ -48,6 +48,14 @@ var boardSchema = new mongoose_1.default.Schema({
             ref: 'card',
         },
     ],
+    admin: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: 'user'
+    },
+    members: [{
+            type: mongoose_1.default.Schema.Types.ObjectId,
+            ref: 'user'
+        }]
 });
 var Board = mongoose_1.default.model('board', boardSchema);
 exports.List = mongoose_1.default.model('list', listSubSchema);

@@ -57,8 +57,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBoard = exports.createBoard = void 0;
+exports.addMembersInBoard = exports.getBoard = exports.createBoard = void 0;
 var user_1 = __importDefault(require("../Models/user"));
+var misc_1 = require("./misc");
 var board_1 = __importDefault(require("../Models/board"));
 var createBoard = function (userId, data) { return __awaiter(void 0, void 0, void 0, function () {
     var userData, boardId, err_1;
@@ -75,7 +76,7 @@ var createBoard = function (userId, data) { return __awaiter(void 0, void 0, voi
                             message: 'User not found',
                         }];
                 }
-                return [4 /*yield*/, storeBoard(data)];
+                return [4 /*yield*/, storeBoard(userId, data)];
             case 2:
                 boardId = _a.sent();
                 storeObjectIdInUser(userData._id, boardId);
@@ -83,8 +84,8 @@ var createBoard = function (userId, data) { return __awaiter(void 0, void 0, voi
                         status: 201,
                         message: 'Board created successfully',
                         data: {
-                            boardId: boardId
-                        }
+                            boardId: boardId,
+                        },
                     }];
             case 3:
                 err_1 = _a.sent();
@@ -111,13 +112,15 @@ var storeObjectIdInUser = function (userId, boardId) { return __awaiter(void 0, 
         }
     });
 }); };
-var storeBoard = function (data) { return __awaiter(void 0, void 0, void 0, function () {
+var storeBoard = function (userId, data) { return __awaiter(void 0, void 0, void 0, function () {
     var board, result;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 board = new board_1.default({
                     title: data.title,
+                    admin: userId,
+                    members: [userId]
                 });
                 return [4 /*yield*/, board.save()];
             case 1:
@@ -164,3 +167,44 @@ var appendCardInList = function (sortedList, cardData) {
         return __assign(__assign({}, list.toObject()), { cards: filteredCardId });
     });
 };
+var addMembersInBoard = function (boardId, data) { return __awaiter(void 0, void 0, void 0, function () {
+    var boardData, filteredUserId, err_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 3, , 4]);
+                return [4 /*yield*/, misc_1.getBoardIfExists(boardId, ['members'])];
+            case 1:
+                boardData = _a.sent();
+                if (!boardData) {
+                    return [2 /*return*/, {
+                            status: 404,
+                            message: "ID not found"
+                        }];
+                }
+                filteredUserId = boardData.members.filter(function (value) { return value._id.toString() === data._id; });
+                if (filteredUserId.length) {
+                    return [2 /*return*/, {
+                            status: 403,
+                            message: "User already exists"
+                        }];
+                }
+                boardData.members = __spreadArrays(boardData.members, [data._id]);
+                return [4 /*yield*/, boardData.save()];
+            case 2:
+                _a.sent();
+                return [2 /*return*/, {
+                        status: 200,
+                        message: "User saved successfully"
+                    }];
+            case 3:
+                err_3 = _a.sent();
+                return [2 /*return*/, {
+                        status: 400,
+                        message: "There was an error - " + err_3
+                    }];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
+exports.addMembersInBoard = addMembersInBoard;

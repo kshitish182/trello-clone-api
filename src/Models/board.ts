@@ -45,6 +45,16 @@ const boardSchema = new mongoose.Schema({
       ref: 'card',
     },
   ],
+  admin: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
+  },
+  members: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'user',
+    },
+  ],
 });
 
 const Board = mongoose.model('board', boardSchema);

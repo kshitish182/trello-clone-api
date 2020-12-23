@@ -39,45 +39,46 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBoardIfExists = exports.doesBoardExist = void 0;
-var board_1 = __importDefault(require("../Models/board"));
-// Use "getBoardIfExists" and remove this
-function doesBoardExist(boardId) {
-    return __awaiter(this, void 0, void 0, function () {
-        var result;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, board_1.default.findById(boardId).select('_id')];
-                case 1:
-                    result = _a.sent();
-                    if (!result) {
-                        return [2 /*return*/, false];
-                    }
-                    return [2 /*return*/, true];
-            }
-        });
+exports.getNonMemberUsers = void 0;
+var user_1 = __importDefault(require("../Models/user"));
+var misc_1 = require("./misc");
+var getNonMemberUsers = function (boardId) { return __awaiter(void 0, void 0, void 0, function () {
+    var boardData, userData, err_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 3, , 4]);
+                return [4 /*yield*/, misc_1.getBoardIfExists(boardId, ['members', 'admin'])];
+            case 1:
+                boardData = _a.sent();
+                if (!boardData) {
+                    return [2 /*return*/, {
+                            status: 404,
+                            message: 'ID not found',
+                        }];
+                }
+                if (!boardData.members.length) {
+                    return [2 /*return*/, {
+                            status: 404,
+                            message: 'No members',
+                        }];
+                }
+                return [4 /*yield*/, user_1.default.find({ _id: { $nin: boardData.members } }).select(['firstName', 'lastName'])];
+            case 2:
+                userData = _a.sent();
+                return [2 /*return*/, {
+                        status: 200,
+                        message: 'Sent all non member user',
+                        data: userData
+                    }];
+            case 3:
+                err_1 = _a.sent();
+                return [2 /*return*/, {
+                        status: 400,
+                        message: "There was an error - " + err_1,
+                    }];
+            case 4: return [2 /*return*/];
+        }
     });
-}
-exports.doesBoardExist = doesBoardExist;
-function getBoardIfExists(boardId, document) {
-    if (document === void 0) { document = []; }
-    return __awaiter(this, void 0, void 0, function () {
-        var result;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    if (!document.length) {
-                        return [2 /*return*/, doesBoardExist(boardId)];
-                    }
-                    return [4 /*yield*/, board_1.default.findById(boardId).select(document)];
-                case 1:
-                    result = _a.sent();
-                    if (!result) {
-                        return [2 /*return*/, null];
-                    }
-                    return [2 /*return*/, result];
-            }
-        });
-    });
-}
-exports.getBoardIfExists = getBoardIfExists;
+}); };
+exports.getNonMemberUsers = getNonMemberUsers;

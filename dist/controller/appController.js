@@ -55,7 +55,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateCardOwnerController = exports.updateListLevelController = exports.getBoardController = exports.createListController = exports.createCardController = exports.board = void 0;
+exports.addMembersinBoardController = exports.getNonMemberUsersController = exports.updateCardOwnerController = exports.updateListLevelController = exports.getBoardController = exports.createListController = exports.createCardController = exports.board = void 0;
+var userServices = __importStar(require("../services/userServices"));
 var listServices = __importStar(require("../services/listServices"));
 var cardServices = __importStar(require("../services/cardServices"));
 var boardServices = __importStar(require("../services/boardServices"));
@@ -137,3 +138,29 @@ var updateCardOwnerController = function (req, res) { return __awaiter(void 0, v
     });
 }); };
 exports.updateCardOwnerController = updateCardOwnerController;
+var getNonMemberUsersController = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var result;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, userServices.getNonMemberUsers(req.params.id)];
+            case 1:
+                result = _a.sent();
+                res.status(result.status).json(result);
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.getNonMemberUsersController = getNonMemberUsersController;
+var addMembersinBoardController = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var result;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, boardServices.addMembersInBoard(req.params.id, req.body)];
+            case 1:
+                result = _a.sent();
+                res.status(result.status).json(result);
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.addMembersinBoardController = addMembersinBoardController;
