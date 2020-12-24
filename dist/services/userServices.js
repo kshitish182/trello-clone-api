@@ -69,7 +69,7 @@ var getNonMemberUsers = function (boardId) { return __awaiter(void 0, void 0, vo
                 return [2 /*return*/, {
                         status: 200,
                         message: 'Sent all non member user',
-                        data: userData
+                        data: userData,
                     }];
             case 3:
                 err_1 = _a.sent();

@@ -54,14 +54,26 @@ export const getBoard = async (boardId: string) => {
   try {
     // TODO: Refactor this logic
     // Convert list into a seperate collection
+    const result = await getBoardIfExists(boardId);
 
-    const boardData: any = await BoardModel.findById(boardId).select(['title', 'cards', 'lists']).populate('cards');
+    if (!result) {
+      return {
+        status: 404,
+        message: 'Board not found',
+      };
+    }
+
+    const boardData: any = await BoardModel.findById(boardId)
+      .select(['title', 'cards', 'lists', 'members'])
+      .populate('cards')
+      .populate('members', ['firstName', 'lastName']);
     const sortedList = boardData.lists.sort((value: any, nextValue: any) => value.level - nextValue.level);
     const appendedList = appendCardInList(sortedList, boardData.cards);
     const responseData = {
       _id: boardData._id,
       title: boardData.title,
       lists: appendedList,
+      members: boardData.members,
     };
 
     return {
@@ -98,7 +110,6 @@ export const addMembersInBoard = async (boardId: string, data: { _id: string }) 
 
     // check if user already exists as a member
     const filteredUserId = boardData.members.filter((value: any) => value._id.toString() === data._id);
-
     if (filteredUserId.length) {
       return {
         status: 403,
@@ -108,6 +119,10 @@ export const addMembersInBoard = async (boardId: string, data: { _id: string }) 
 
     boardData.members = [...boardData.members, data._id];
     await boardData.save();
+
+    const userData: any = await UserModel.findById(data._id).select('boards');
+    userData.boards = [...userData.boards, boardId];
+    userData.save();
 
     return {
       status: 200,

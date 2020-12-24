@@ -120,7 +120,7 @@ var storeBoard = function (userId, data) { return __awaiter(void 0, void 0, void
                 board = new board_1.default({
                     title: data.title,
                     admin: userId,
-                    members: [userId]
+                    members: [userId],
                 });
                 return [4 /*yield*/, board.save()];
             case 1:
@@ -130,13 +130,22 @@ var storeBoard = function (userId, data) { return __awaiter(void 0, void 0, void
     });
 }); };
 var getBoard = function (boardId) { return __awaiter(void 0, void 0, void 0, function () {
-    var boardData, sortedList, appendedList, responseData, err_2;
+    var result, boardData, sortedList, appendedList, responseData, err_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, board_1.default.findById(boardId).select(['title', 'cards', 'lists']).populate('cards')];
+                _a.trys.push([0, 3, , 4]);
+                return [4 /*yield*/, misc_1.getBoardIfExists(boardId)];
             case 1:
+                result = _a.sent();
+                if (!result) {
+                    return [2 /*return*/, {
+                            status: 404,
+                            message: "Board not found"
+                        }];
+                }
+                return [4 /*yield*/, board_1.default.findById(boardId).select(['title', 'cards', 'lists', 'members']).populate('cards').populate('members', ['firstName', 'lastName'])];
+            case 2:
                 boardData = _a.sent();
                 sortedList = boardData.lists.sort(function (value, nextValue) { return value.level - nextValue.level; });
                 appendedList = appendCardInList(sortedList, boardData.cards);
@@ -144,19 +153,20 @@ var getBoard = function (boardId) { return __awaiter(void 0, void 0, void 0, fun
                     _id: boardData._id,
                     title: boardData.title,
                     lists: appendedList,
+                    members: boardData.members
                 };
                 return [2 /*return*/, {
                         status: 200,
                         message: 'Retrieved all the board',
                         data: responseData,
                     }];
-            case 2:
+            case 3:
                 err_2 = _a.sent();
                 return [2 /*return*/, {
                         status: 400,
                         message: "There was an error - " + err_2,
                     }];
-            case 3: return [2 /*return*/];
+            case 4: return [2 /*return*/];
         }
     });
 }); };
@@ -168,42 +178,47 @@ var appendCardInList = function (sortedList, cardData) {
     });
 };
 var addMembersInBoard = function (boardId, data) { return __awaiter(void 0, void 0, void 0, function () {
-    var boardData, filteredUserId, err_3;
+    var boardData, filteredUserId, userData, err_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 3, , 4]);
+                _a.trys.push([0, 4, , 5]);
                 return [4 /*yield*/, misc_1.getBoardIfExists(boardId, ['members'])];
             case 1:
                 boardData = _a.sent();
                 if (!boardData) {
                     return [2 /*return*/, {
                             status: 404,
-                            message: "ID not found"
+                            message: 'ID not found',
                         }];
                 }
                 filteredUserId = boardData.members.filter(function (value) { return value._id.toString() === data._id; });
                 if (filteredUserId.length) {
                     return [2 /*return*/, {
                             status: 403,
-                            message: "User already exists"
+                            message: 'User already exists',
                         }];
                 }
                 boardData.members = __spreadArrays(boardData.members, [data._id]);
                 return [4 /*yield*/, boardData.save()];
             case 2:
                 _a.sent();
+                return [4 /*yield*/, user_1.default.findById(data._id).select('boards')];
+            case 3:
+                userData = _a.sent();
+                userData.boards = __spreadArrays(userData.boards, [boardId]);
+                userData.save();
                 return [2 /*return*/, {
                         status: 200,
-                        message: "User saved successfully"
+                        message: 'User saved successfully',
                     }];
-            case 3:
+            case 4:
                 err_3 = _a.sent();
                 return [2 /*return*/, {
                         status: 400,
-                        message: "There was an error - " + err_3
+                        message: "There was an error - " + err_3,
                     }];
-            case 4: return [2 /*return*/];
+            case 5: return [2 /*return*/];
         }
     });
 }); };

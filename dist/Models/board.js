@@ -50,12 +50,14 @@ var boardSchema = new mongoose_1.default.Schema({
     ],
     admin: {
         type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: 'user'
+        ref: 'user',
     },
-    members: [{
+    members: [
+        {
             type: mongoose_1.default.Schema.Types.ObjectId,
-            ref: 'user'
-        }]
+            ref: 'user',
+        },
+    ],
 });
 var Board = mongoose_1.default.model('board', boardSchema);
 exports.List = mongoose_1.default.model('list', listSubSchema);
