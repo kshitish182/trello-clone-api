@@ -135,3 +135,31 @@ export const addMembersInBoard = async (boardId: string, data: { _id: string }) 
     };
   }
 };
+
+// update boardData
+
+export async function update(boardId: string, payload: { title: string }) {
+  try {
+    const boardData: any = await getBoardIfExists(boardId, ['title']);
+
+    if (!boardData) {
+      return {
+        status: 404,
+        message: 'Id not found',
+      };
+    }
+
+    boardData.title = payload.title;
+    await boardData.save();
+
+    return {
+      status: 200,
+      message: 'Updated successfully',
+    };
+  } catch (err) {
+    return {
+      status: 400,
+      message: `There was an error - ${err}`,
+    };
+  }
+}

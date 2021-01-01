@@ -14,4 +14,6 @@ appRouter.post('/addMembersInBoard/:id', appController.addMembersinBoardControll
 appRouter.put('/updateListLevel/:id', appController.updateListLevelController);
 appRouter.put('/updateCardOwner/:id', appController.updateCardOwnerController);
 
+appRouter.put('/board/:id/update', appController.boardController.update);
+
 export default appRouter;
