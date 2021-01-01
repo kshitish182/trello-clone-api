@@ -141,10 +141,13 @@ var getBoard = function (boardId) { return __awaiter(void 0, void 0, void 0, fun
                 if (!result) {
                     return [2 /*return*/, {
                             status: 404,
-                            message: "Board not found"
+                            message: 'Board not found',
                         }];
                 }
-                return [4 /*yield*/, board_1.default.findById(boardId).select(['title', 'cards', 'lists', 'members']).populate('cards').populate('members', ['firstName', 'lastName'])];
+                return [4 /*yield*/, board_1.default.findById(boardId)
+                        .select(['title', 'cards', 'lists', 'members'])
+                        .populate('cards')
+                        .populate('members', ['firstName', 'lastName'])];
             case 2:
                 boardData = _a.sent();
                 sortedList = boardData.lists.sort(function (value, nextValue) { return value.level - nextValue.level; });
@@ -153,7 +156,7 @@ var getBoard = function (boardId) { return __awaiter(void 0, void 0, void 0, fun
                     _id: boardData._id,
                     title: boardData.title,
                     lists: appendedList,
-                    members: boardData.members
+                    members: boardData.members,
                 };
                 return [2 /*return*/, {
                         status: 200,
