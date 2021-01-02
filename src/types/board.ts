@@ -18,4 +18,5 @@ export interface Card {
   ownedBy: string;
   title: string;
   description: string;
+  assignee: string;
 }

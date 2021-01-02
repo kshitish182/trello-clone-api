@@ -5,9 +5,11 @@ import * as listServices from '../services/listServices';
 import * as cardServices from '../services/cardServices';
 import * as boardServices from '../services/boardServices';
 
+import * as cardController from './cardController';
+import * as listController from './listController';
 import * as boardController from './boardController';
 
-export { boardController };
+export { boardController, listController, cardController };
 
 export const board = async (req: Request, res: Response) => {
   const result = await boardServices.createBoard(req.params.id, req.body);

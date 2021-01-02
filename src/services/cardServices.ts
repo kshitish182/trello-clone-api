@@ -1,10 +1,11 @@
 import { doesBoardExist } from './misc';
 import CardModel from '../Models/cards';
 import BoardModel from '../Models/board';
+import { setCardContent, updateCardContent } from '../DAO/card.dao';
 
-export const createCard = async (boardId: string, data: any) => {
+export const createCard = async (boardId: string, data: { title: string; ownedBy: string }) => {
   try {
-    const boardData: any = await BoardModel.findById(boardId).select('lists');
+    const boardData: any = await BoardModel.findById(boardId).select(['lists', 'admin']);
     const parentListData = !!boardData
       ? boardData.lists.filter((value: any) => value._id.toString() === data.ownedBy)
       : [];
@@ -16,7 +17,7 @@ export const createCard = async (boardId: string, data: any) => {
       };
     }
 
-    const savedCardData = await storeInCardCollection(data);
+    const savedCardData = await setCardContent({ ...data, assignee: boardData.admin });
     await storeInBoardCollection(savedCardData._id, boardId);
 
     return {
@@ -35,15 +36,6 @@ export const createCard = async (boardId: string, data: any) => {
     };
   }
 };
-
-function storeInCardCollection(data: any) {
-  const card = new CardModel({
-    ownedBy: data.ownedBy,
-    title: data.title,
-  });
-
-  return card.save();
-}
 
 async function storeInBoardCollection(cardId: string, boardId: string) {
   const boardData: any = await BoardModel.findById(boardId).select('cards');
@@ -87,3 +79,27 @@ export const updateCardOwner = async (boardId: string, data: { _id: string; owne
     };
   }
 };
+
+// new implementation
+
+export async function update(cardId: string, payload: { title: string; description: string; assignee: string }) {
+  try {
+    const cardData = await updateCardContent(cardId, payload);
+    if (!cardData) {
+      return {
+        status: 404,
+        message: 'Card id not found',
+      };
+    }
+
+    return {
+      status: 200,
+      message: 'Card is updated',
+    };
+  } catch (err) {
+    return {
+      status: 400,
+      message: `Something went wrong - ${err}`,
+    };
+  }
+}

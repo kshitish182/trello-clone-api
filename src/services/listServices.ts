@@ -1,4 +1,6 @@
+import { List } from '../types/board';
 import BoardModel from '../Models/board';
+import { getBoardIfExists } from './misc';
 
 export const createList = async (boardId: string, data: any) => {
   try {
@@ -78,4 +80,33 @@ async function doesBoardExist(boardId: string) {
   }
 
   return true;
+}
+
+// new implementation
+
+export async function update(boardId: string, payload: List[]) {
+  try {
+    const boardData: any = getBoardIfExists(boardId, ['lists']);
+
+    if (!boardData) {
+      return {
+        status: 404,
+        message: 'board id not found',
+      };
+    }
+
+    boardData.lists = payload;
+
+    await boardData.save();
+
+    return {
+      status: 200,
+      message: 'list data updated successfully',
+    };
+  } catch (err) {
+    return {
+      status: 400,
+      message: `There was an error - ${err}`,
+    };
+  }
 }
