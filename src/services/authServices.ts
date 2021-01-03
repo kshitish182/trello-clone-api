@@ -2,6 +2,7 @@ import brcypt from 'bcrypt';
 
 import Users from '../types/users';
 import UserModal from '../Models/user';
+import { verifyToken, signToken } from '../utils/jwtToken';
 
 const HASH_SALT_ROUND = 10;
 
@@ -59,6 +60,8 @@ export const loginService = async (data: Pick<Users, 'email' | 'password'>) => {
       };
     }
 
+    const accessToken = signToken(user.email);
+
     return {
       status: 200,
       message: 'Successfully logged in',
@@ -67,6 +70,7 @@ export const loginService = async (data: Pick<Users, 'email' | 'password'>) => {
         firstName: user.firstName,
         lastName: user.lastName,
         boards: user.boards,
+        accessToken: accessToken,
       },
     };
   } catch (err) {
@@ -103,6 +107,7 @@ export const registerService = async (data: Users) => {
 
     const hashedPassword = await hashPassword(password);
     const [userData]: any = await registerUser({ ...data, password: hashedPassword });
+    const accessToken = signToken(user.email);
 
     return {
       status: 201,
@@ -112,6 +117,7 @@ export const registerService = async (data: Users) => {
         firstName: userData.firstName,
         lastName: userData.lastName,
         boards: userData.boards,
+        accessToken: accessToken,
       },
     };
   } catch (err) {
@@ -120,3 +126,41 @@ export const registerService = async (data: Users) => {
     return { status: 400, message: `User could'nt be registered - ${err}` };
   }
 };
+
+export async function verifyJwtToken(payload: { token: string; email: string }) {
+  try {
+    const isValid = verifyToken(payload.token);
+
+    if (!isValid) {
+      return {
+        status: 401,
+        message: 'User token expired',
+      };
+    }
+
+    const [user]: any = await getUserByLoginCred(payload.email);
+
+    if (!user) {
+      return {
+        status: 404,
+        message: "Could'nt find the user",
+      };
+    }
+
+    return {
+      status: 200,
+      message: 'User is authorized',
+      data: {
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        boards: user.boards,
+      },
+    };
+  } catch (err) {
+    return {
+      status: 400,
+      message: `There was an error - ${err}`,
+    };
+  }
+}

@@ -25,6 +25,7 @@ export const createCard = async (boardId: string, data: { title: string; ownedBy
       message: 'Card created successfully',
       data: {
         _id: savedCardData._id,
+        assignee: boardData.admin,
       },
     };
   } catch (err) {

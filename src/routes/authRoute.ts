@@ -7,4 +7,6 @@ authRouter.post('/login', authController.loginController);
 
 authRouter.post('/register', authController.registerController);
 
+authRouter.get('/verify-token', authController.tokenController);
+
 export default authRouter;
