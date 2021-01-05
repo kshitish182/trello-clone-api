@@ -8,9 +8,6 @@
     "transpile": "tsc -w",
     "start:js": "nodemon dist/index.js",
     "start": "run-p transpile start:js",
-    "build": "cd ../trello-app && npm run build",
-    "install-client": "cd ../trello-app && npm install",
-    "heroku-postbuild": "npm run install-client && npm run build"
   },
   "author": "",
   "license": "ISC",
