@@ -36,7 +36,10 @@ app.use('/api', validateAuthorization, appRouter);
 
 async function connectDb(req: Request, res: Response, next: NextFunction) {
   try {
-    await moongose.connect('mongodb://localhost/trelloDB', { useNewUrlParser: true, useUnifiedTopology: true });
+    await moongose.connect(process.env.MONGO_DB_URI || 'mongodb://localhost/trelloDB', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     console.log('Connected to MongoDB');
     next();
   } catch (err) {
@@ -47,6 +50,10 @@ async function connectDb(req: Request, res: Response, next: NextFunction) {
       message: "Could'nt connect to database",
     });
   }
+}
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('../trello-app/build'));
 }
 
 const PORT = process.env.PORT || 5000;
