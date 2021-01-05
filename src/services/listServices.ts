@@ -86,7 +86,7 @@ async function doesBoardExist(boardId: string) {
 
 export async function update(boardId: string, payload: List[]) {
   try {
-    const boardData: any = getBoardIfExists(boardId, ['lists']);
+    const boardData: any = await getBoardIfExists(boardId, ['lists']);
 
     if (!boardData) {
       return {

@@ -62,6 +62,13 @@ export const loginService = async (data: Pick<Users, 'email' | 'password'>) => {
 
     const accessToken = signToken(user.email);
 
+    if (!accessToken) {
+      return {
+        status: 400,
+        message: 'There was an error while creating access token',
+      };
+    }
+
     return {
       status: 200,
       message: 'Successfully logged in',
@@ -70,6 +77,7 @@ export const loginService = async (data: Pick<Users, 'email' | 'password'>) => {
         firstName: user.firstName,
         lastName: user.lastName,
         boards: user.boards,
+        email: email,
         accessToken: accessToken,
       },
     };
@@ -106,8 +114,15 @@ export const registerService = async (data: Users) => {
     }
 
     const hashedPassword = await hashPassword(password);
+    const accessToken = signToken(email);
     const [userData]: any = await registerUser({ ...data, password: hashedPassword });
-    const accessToken = signToken(user.email);
+
+    if (!accessToken) {
+      return {
+        status: 400,
+        message: 'There was an error while creating access token',
+      };
+    }
 
     return {
       status: 201,
@@ -116,6 +131,7 @@ export const registerService = async (data: Users) => {
         _id: userData._id,
         firstName: userData.firstName,
         lastName: userData.lastName,
+        email: email,
         boards: userData.boards,
         accessToken: accessToken,
       },
@@ -127,9 +143,9 @@ export const registerService = async (data: Users) => {
   }
 };
 
-export async function verifyJwtToken(payload: { token: string; email: string }) {
+export async function verifyJwtToken(payload: { accessToken: string; email: string }) {
   try {
-    const isValid = verifyToken(payload.token);
+    const isValid = verifyToken(payload.accessToken);
 
     if (!isValid) {
       return {
@@ -154,6 +170,7 @@ export async function verifyJwtToken(payload: { token: string; email: string }) 
         _id: user._id,
         firstName: user.firstName,
         lastName: user.lastName,
+        email: user.email,
         boards: user.boards,
       },
     };

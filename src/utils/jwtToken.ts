@@ -4,13 +4,7 @@ import jwt from 'jsonwebtoken';
 dotenv.config();
 
 export function verifyToken(accessToken: string) {
-  jwt.verify(accessToken, process.env.SECRET_TOKEN_KEY as string, (err) => {
-    if (err) {
-      return false;
-    }
-  });
-
-  return true;
+  return jwt.verify(accessToken, process.env.SECRET_TOKEN_KEY as string);
 }
 
 export function signToken(payload: string) {
