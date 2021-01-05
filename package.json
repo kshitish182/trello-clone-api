@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "transpile": "tsc -w",
     "start:js": "nodemon dist/index.js",
-    "start": "run-p transpile start:js"
+    "start": "run-p transpile start:js",
+    "build": "cd ../trello-app &&  npm run build"
   },
   "author": "",
   "license": "ISC",
